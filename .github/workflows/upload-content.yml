@@ -17,9 +17,11 @@ jobs:
     steps:
     - name: Move to and pull local clone of access-summaries repo
       run: |
-        cd /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries
         source /home/dandi/miniconda3/etc/profile.d/conda.sh
         conda activate s3_logs_cron
+        cd /mnt/backup/dandi/dandiarchive-logs-mapped.cbaker239
+        find . -type f -name 'dandiset_summary*.tsv' -exec cp --parents {} /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/summaries/ \;
+        cd /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git pull
