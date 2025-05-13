@@ -1,11 +1,7 @@
 name: Update archive summaries
 on:
   workflow_call:
-    secrets:
-      OPENCAGE_API_KEY:
-        required: true
-      IPINFO_API_KEY:
-        required: true
+  workflow_dispatch:
 
 jobs:
 
@@ -21,8 +17,6 @@ jobs:
     steps:
       - name: Update archive summaries
         run: |
-          export OPENCAGE_API_KEY=${{ secrets.OPENCAGE_API_KEY }}
-          export IPINFO_CREDENTIALS=${{ secrets.IPINFO_API_KEY }}
           source /home/dandi/miniconda3/etc/profile.d/conda.sh
           conda activate s3_logs_cron
           generate_archive_summaries \
