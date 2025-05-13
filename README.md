@@ -4,7 +4,7 @@ GitHub Action-controlled CRON jobs to run on a self-hosted runner on Drogon.
 
 Follow instructions from settings for establishing self-hosted runner.
 
-Find the startup script at `/home/cbaker239/startup.sh`:, which should trigger on restart of Drogon, and which should currently be:
+Find the startup script at `/home/cbaker239/startup.sh`:
 
 ```bash
 tmux new -scodys_self_hosted_runner
