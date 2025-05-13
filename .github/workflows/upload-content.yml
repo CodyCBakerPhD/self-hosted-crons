@@ -17,28 +17,22 @@ jobs:
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        repository: dandi/access-summaries
-        ref: main
-        fetch-depth: 0  # otherwise, there would be errors pushing refs to the destination repository
-        token: ${{ secrets.API_KEY_GITHUB }}
-        persist-credentials: false  # otherwise, the token used is the GITHUB_TOKEN
-
-    - name: Copy latest cache files  # Actual data files should dump to this folder from other workflows
+    - name: Move to and pull local clone of access-summaries repo
+      run: |
+        cd /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries
+        source /home/dandi/miniconda3/etc/profile.d/conda.sh
+        conda activate s3_logs_cron
+        git pull
+    
+    - name: Copy latest cache files
       run: |
         cp \
         /mnt/backup/dandi/dandiarchive-logs-parser-cache/dandi_s3_log_parser/region_codes_to_coordinates.json \
-        ./content/region_codes_to_coordinates.json
+        /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/region_codes_to_coordinates.json
 
     - name: Add and commit files
-      run: |  # `|| true` below to skip if nothing changed from pre-commit
+      run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git commit -m "update S3 log summary content" -a || true
-
-    - name: Push changes
-      uses: ad-m/github-push-action@v0.8.0
-      with:
-        github_token: ${{ secrets.API_KEY_GITHUB }}
-        branch: main
+        git commit -m "update S3 access log summary content" -a || true
+        git push
