@@ -19,10 +19,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.API_KEY_GITHUB }}
+        repository: dandi/access-summaries
         ref: main
-        persist-credentials: false  # otherwise, the token used is the GITHUB_TOKEN
         fetch-depth: 0  # otherwise, there would be errors pushing refs to the destination repository
+        token: ${{ secrets.API_KEY_GITHUB }}
+        persist-credentials: false  # otherwise, the token used is the GITHUB_TOKEN
 
     - name: Copy latest cache files  # Actual data files should dump to this folder from other workflows
       run: |
