@@ -1,9 +1,5 @@
 name: Upload content
-on:
-  workflow_call:
-    secrets:
-      API_KEY_GITHUB:
-        required: true
+on: workflow_call
 
 jobs:
 
@@ -22,21 +18,13 @@ jobs:
         cd /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries
         source /home/dandi/miniconda3/etc/profile.d/conda.sh
         conda activate s3_logs_cron
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
         git pull
         git branch
-    
-    - name: Copy latest cache files
-      run: |
         cp \
         /mnt/backup/dandi/dandiarchive-logs-parser-cache/dandi_s3_log_parser/region_codes_to_coordinates.json \
         /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/region_codes_to_coordinates.json
-
-    - name: Add and commit files
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        pwd
-        git branch
         git status
         git add content
         git commit -m "update S3 access log summary content"
