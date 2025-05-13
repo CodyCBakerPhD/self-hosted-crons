@@ -34,8 +34,6 @@ jobs:
   UploadContent:
     uses: ./.github/workflows/upload-content.yml
     needs: UpdateCoordinates
-    secrets:
-      API_KEY_GITHUB: ${{ secrets.API_KEY_GITHUB }}
 
   CheckForErrors:
     uses: ./.github/workflows/check-for-errors.yml
