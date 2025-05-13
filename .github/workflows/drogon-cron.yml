@@ -24,9 +24,13 @@ jobs:
           label: drogon
           token: ${{ secrets.API_KEY_GITHUB }}
 
+  UpdateArchiveSummaries:
+    uses: ./.github/workflows/update-archive-summaries.yml
+    needs: CheckDrogon
+
   UpdateCoordinates:
     uses: ./.github/workflows/update-regions-to-coordinates.yml
-    needs: CheckDrogon
+    needs: UpdateArchiveSummaries
     secrets:
       OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
       IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
