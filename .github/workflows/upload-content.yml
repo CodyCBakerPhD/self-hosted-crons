@@ -25,8 +25,8 @@ jobs:
         git pull
         git branch
         cp \
-        /mnt/backup/dandi/dandiarchive-logs-parser-cache/dandi_s3_log_parser/region_codes_to_coordinates.json \
-        /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/region_codes_to_coordinates.json
+          /mnt/backup/dandi/dandiarchive-logs-parser-cache/dandi_s3_log_parser/region_codes_to_coordinates.json \
+          /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/region_codes_to_coordinates.json
         git status
         git add content
         git commit -m "update S3 access log summary content" || true
