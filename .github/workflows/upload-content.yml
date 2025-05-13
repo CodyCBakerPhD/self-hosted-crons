@@ -35,5 +35,7 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git commit -m "update S3 access log summary content" -a || true
+        git status
+        git add content
+        git commit -m "update S3 access log summary content"
         git push
