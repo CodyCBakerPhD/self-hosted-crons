@@ -1,5 +1,7 @@
 name: Upload content
-on: workflow_call
+on:
+  workflow_call:
+  workflow_dispatch:
 
 jobs:
 
@@ -27,5 +29,5 @@ jobs:
         /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/region_codes_to_coordinates.json
         git status
         git add content
-        git commit -m "update S3 access log summary content"
+        git commit -m "update S3 access log summary content" || true
         git push
