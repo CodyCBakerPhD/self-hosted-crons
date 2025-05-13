@@ -23,6 +23,7 @@ jobs:
         source /home/dandi/miniconda3/etc/profile.d/conda.sh
         conda activate s3_logs_cron
         git pull
+        git branch
     
     - name: Copy latest cache files
       run: |
