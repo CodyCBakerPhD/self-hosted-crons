@@ -1,0 +1,23 @@
+name: Generate Dandiset totals
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+
+  run:
+    # Will read on PR dashboard as 'Deploy / GenerateDandisetTotals / Drogon'
+    # Action dashboard identified by 'Generate Dandiset totals'
+    # Requirement settings identified as 'GenerateDandisetTotals / Drogon'
+    name: Drogon
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Update Dandiset totals
+        run: |
+          source /home/dandi/miniconda3/etc/profile.d/conda.sh
+          conda activate s3_logs_cron
+          generate_all_dandiset_totals \
+            --mapped_s3_logs_folder_path /mnt/backup/dandi/dandiarchive-logs-mapped.cbaker239
