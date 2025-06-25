@@ -1,10 +1,10 @@
 # Drogon CRONs
 
-GitHub Action-controlled CRON jobs to run on a self-hosted runner on Drogon.
+GitHub Action-controlled CRON jobs to run on a self-hosted runner on remote servers.
 
-Follow instructions from settings for establishing self-hosted runner.
+Follow the instructions from settings for establishing self-hosted runner.
 
-Find the startup script at `/home/cbaker239/startup.sh`:
+A startup script at `~/startup.sh`:
 
 ```bash
 tmux new -scodys_self_hosted_runner
