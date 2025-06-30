@@ -17,21 +17,20 @@ jobs:
     steps:
     - name: Move to and pull local clone of access-summaries repo
       run: |
-        source /home/dandi/miniconda3/etc/profile.d/conda.sh
-        conda activate s3_logs_cron
-        cd /mnt/backup/dandi/dandiarchive-logs-mapped.cbaker239
-        find . -type f -name 'dandiset_summary*.tsv' -exec cp --parents {} /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/summaries/ \;
-        cp *.tsv /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/summaries
-        cp *.json /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content
-        cd /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries
+        source /data/dandi/s3-logs/conda/bin/activate s3_logs_cron
+        cd /data/dandi/s3-logs/extraction_cache/summaries
+        find . -type f -name '*.tsv' -exec cp --parents {} /data/dandi/s3-logs/access-summaries/content/summaries/ \;
+        find . -type f -name '*.json' -exec cp --parents {} /data/dandi/s3-logs/access-summaries/content/summaries/ \;
+        cp ./totals.json /data/dandi/s3-logs/access-summaries/content
+        cd /data/dandi/s3-logs/access-summaries
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git pull
         git branch
         cp \
-          /mnt/backup/dandi/dandiarchive-logs-parser-cache/dandi_s3_log_parser/region_codes_to_coordinates.json \
-          /mnt/backup/dandi/dandiarchive-logs-cody/access-summaries/content/region_codes_to_coordinates.json
+          /data/dandi/s3-logs/extraction_cache/ips/region_codes_to_coordinates.json \
+          /data/dandi/s3-logs/access-summaries/content/region_codes_to_coordinates.json
         git status
         git add content
-        git commit -m "update S3 access log summary content" || true
+        git commit -m "update S3 access summary content" || true
         git push
