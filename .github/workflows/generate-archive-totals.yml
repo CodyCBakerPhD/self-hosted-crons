@@ -18,4 +18,4 @@ jobs:
       - name: Generate archive totals
         run: |
           conda activate s3_logs_cron
-          s3logextraction update summaries --mode archive
+          s3logextraction update totals --mode archive
