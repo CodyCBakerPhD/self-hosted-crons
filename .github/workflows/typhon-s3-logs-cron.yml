@@ -10,8 +10,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  CheckDrogon:
-    name: Pre Run Check
+  CheckTyphon:
+    name: Pre-run Check
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
@@ -24,24 +24,43 @@ jobs:
           label: typhon
           token: ${{ secrets.API_KEY_GITHUB }}
 
-  UpdateDandisetTotals:
-    uses: ./.github/workflows/generate-dandiset-totals.yml
-    needs: CheckDrogon
+  UpdateExtraction:
+    uses: ./.github/workflows/update-extraction.yml
+    needs: CheckTyphon
+    secrets:
+      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
-  UpdateArchiveSummaries:
-    uses: ./.github/workflows/update-archive-summaries.yml
-    needs: UpdateDandisetTotals
+  UpdateIpIndexes:
+    uses: ./.github/workflows/update-ip-indexes.yml
+    needs: UpdateExtraction
+    secrets:
+      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
-  UpdateCoordinates:
-    uses: ./.github/workflows/update-regions-to-coordinates.yml
-    needs: UpdateArchiveSummaries
+  UpdateIpRegions:
+    uses: ./.github/workflows/update-ip-regions.yml
+    needs: UpdateIpIndexes
     secrets:
       OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
       IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
 
+  UpdateRegionCoordinates:
+    uses: ./.github/workflows/update-region-coordinates.yml
+    needs: UpdateIpRegions
+    secrets:
+      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+
+  GenerateDandisetSummaries:
+    uses: ./.github/workflows/generate-dandiset-totals.yml
+    needs: UpdateRegionCoordinates
+
+  GenerateArchiveTotals:
+    uses: ./.github/workflows/generate-archive-totals.yml
+    needs: GenerateDandisetSummaries
+
   UploadContent:
     uses: ./.github/workflows/upload-content.yml
-    needs: UpdateCoordinates
+    needs: GenerateArchiveTotals
 
   CheckForErrors:
     uses: ./.github/workflows/check-for-errors.yml
