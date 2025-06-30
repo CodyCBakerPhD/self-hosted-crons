@@ -62,13 +62,9 @@ jobs:
     uses: ./.github/workflows/upload-content.yml
     needs: GenerateArchiveTotals
 
-  CheckForErrors:
-    uses: ./.github/workflows/check-for-errors.yml
-    needs: UploadContent
-
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckDrogon, UpdateCoordinates]
+    needs: [CheckTyphon, UploadContent]
     runs-on: ubuntu-latest
     steps:
       - name: Send email notification
@@ -80,7 +76,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "Drogon S3 Log CRON Failed"
           to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
-          from: Drogon CRON
+          from: Typhon CRON
           body: |
             The scheduled run of S3 log updates encountered an issue, please check status at
             https://github.com/CodyCBakerPhD/self-hosted-crons/.github/workflows/typhon-s3-logs-cron.yml
