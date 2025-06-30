@@ -40,7 +40,6 @@ jobs:
     uses: ./.github/workflows/update-ip-regions.yml
     needs: UpdateIpIndexes
     secrets:
-      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
       IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
 
   UpdateRegionCoordinates:
