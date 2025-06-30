@@ -28,8 +28,8 @@ jobs:
         git pull
         git branch
         cp \
-          /data/dandi/s3-logs/extraction_cache/ips/region_codes_to_coordinates.json \
-          /data/dandi/s3-logs/access-summaries/content/region_codes_to_coordinates.json
+          /data/dandi/s3-logs/extraction_cache/ips/region_codes_to_coordinates.yaml \
+          /data/dandi/s3-logs/access-summaries/content/region_codes_to_coordinates.yaml
         git status
       # git add content
       # git commit -m "update S3 access summary content" || true
