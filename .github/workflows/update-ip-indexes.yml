@@ -1,0 +1,24 @@
+name: Update IP indexes
+on:
+  workflow_call:
+    secrets:
+      S3_LOG_EXTRACTION_PASSWORD :
+        required: true
+
+jobs:
+
+  run:
+    # Will read on PR dashboard as 'Deploy / UpdateIpIndexes / Typhon'
+    # Action dashboard identified by 'Update IP indexes'
+    # Requirement settings identified as 'UpdateIpIndexes / Typhon'
+    name: Typhon
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Update region codes to coordinates
+        run: |
+          export S3_LOG_EXTRACTION_PASSWORD =${{ secrets.S3_LOG_EXTRACTION_PASSWORD  }}
+          conda activate s3_logs_cron
+          s3logextraction update ip indexes
