@@ -10,10 +10,10 @@ on:
 jobs:
 
   run:
-    # Will read on PR dashboard as 'Deploy / UpdateCoordinates / Drogon'
-    # Action dashboard identified by 'Update coordinates'
-    # Requirement settings identified as 'UpdateCoordinates / Drogon'
-    name: Drogon
+    # Will read on PR dashboard as 'Deploy / UpdateCoordinates / Typhon'
+    # Action dashboard identified by 'Update region coordinates'
+    # Requirement settings identified as 'UpdateCoordinates / Typhon'
+    name: Typhon
     runs-on: self-hosted
     strategy:
       fail-fast: false
