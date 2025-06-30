@@ -69,6 +69,8 @@ jobs:
   UploadContent:
     uses: ./.github/workflows/upload-content.yml
     needs: GenerateArchiveTotals
+    secrets:
+      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
