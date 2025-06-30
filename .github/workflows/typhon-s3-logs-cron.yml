@@ -22,7 +22,7 @@ jobs:
         with:
           org: CodyCBakerPhD/self-hosted-crons
           label: typhon
-          token: ${{ secrets.API_KEY_GITHUB }}
+          token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateExtraction:
     uses: ./.github/workflows/update-extraction.yml
