@@ -10,9 +10,9 @@ on:
 jobs:
 
   run:
-    # Will read on PR dashboard as 'Deploy / UpdateCoordinates / Typhon'
+    # Will read on PR dashboard as 'Deploy / UpdateRegionCoordinates / Typhon'
     # Action dashboard identified by 'Update region coordinates'
-    # Requirement settings identified as 'UpdateCoordinates / Typhon'
+    # Requirement settings identified as 'UpdateRegionCoordinates / Typhon'
     name: Typhon
     runs-on: self-hosted
     strategy:
@@ -24,4 +24,4 @@ jobs:
           export OPENCAGE_API_KEY=${{ secrets.OPENCAGE_API_KEY }}
           export IPINFO_CREDENTIALS=${{ secrets.IPINFO_API_KEY }}
           conda activate s3_logs_cron
-          s3logextraction update ip regions
+          s3logextraction update ip coordinates
