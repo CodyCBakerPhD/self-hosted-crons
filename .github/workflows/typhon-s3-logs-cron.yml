@@ -54,9 +54,17 @@ jobs:
     uses: ./.github/workflows/generate-dandiset-summaries.yml
     needs: UpdateRegionCoordinates
 
+  GenerateArchiveSummaries:
+    uses: ./.github/workflows/generate-archive-summaries.yml
+    needs: GenerateDandisetSummaries
+
+  GenerateDandisetTotals:
+    uses: ./.github/workflows/generate-dandiset-totals.yml
+    needs: GenerateArchiveSummaries
+
   GenerateArchiveTotals:
     uses: ./.github/workflows/generate-archive-totals.yml
-    needs: GenerateDandisetSummaries
+    needs: GenerateDandisetTotals
 
   UploadContent:
     uses: ./.github/workflows/upload-content.yml
