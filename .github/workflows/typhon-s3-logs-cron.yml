@@ -83,4 +83,4 @@ jobs:
           from: Drogon CRON
           body: |
             The scheduled run of S3 log updates encountered an issue, please check status at
-            https://github.com/dandi/access-summaries/actions/workflows/drogon_cron.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/.github/workflows/typhon-s3-logs-cron.yml
