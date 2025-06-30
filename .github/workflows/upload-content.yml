@@ -1,7 +1,9 @@
 name: Upload content
 on:
   workflow_call:
-  workflow_dispatch:
+    secrets:
+      _API_KEY_GITHUB:
+        required: true
 
 jobs:
 
@@ -25,6 +27,7 @@ jobs:
         cd /data/dandi/s3-logs/access-summaries
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
+        git remote set-url origin https://x-access-token:${{ secrets._API_KEY_GITHUB }}@github.com/CodyCBakerPhD/self-hosted-crons.git
         git pull
         git branch
         cp \
