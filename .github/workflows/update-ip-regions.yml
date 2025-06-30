@@ -19,6 +19,6 @@ jobs:
     steps:
       - name: Update region codes to coordinates
         run: |
-          export IPINFO_CREDENTIALS=${{ secrets.IPINFO_API_KEY }}
+          export IPINFO_API_KEY=${{ secrets.IPINFO_API_KEY }}
           source /data/dandi/s3-logs/conda/bin/activate s3_logs_cron
           s3logextraction update ip regions
