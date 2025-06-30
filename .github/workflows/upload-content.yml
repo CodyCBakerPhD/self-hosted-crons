@@ -8,10 +8,10 @@ on:
 jobs:
 
   run:
-    # Will read on PR dashboard as 'Deploy / UploadContent / Drogon'
+    # Will read on PR dashboard as 'Deploy / UploadContent / Typhon'
     # Action dashboard identified by 'Upload content'
-    # Requirement settings identified as 'UploadContent / Drogon'
-    name: Drogon
+    # Requirement settings identified as 'UploadContent / Typhon'
+    name: Typhon
     runs-on: self-hosted
     strategy:
       fail-fast: false
