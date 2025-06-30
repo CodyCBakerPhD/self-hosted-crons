@@ -8,9 +8,9 @@ on:
 jobs:
 
   run:
-    # Will read on PR dashboard as 'Deploy / Update / Typhon'
+    # Will read on PR dashboard as 'Deploy / UpdateIpRegions / Typhon'
     # Action dashboard identified by 'Update IP regions'
-    # Requirement settings identified as 'UpdateRegions / Typhon'
+    # Requirement settings identified as 'UpdateIpRegions / Typhon'
     name: Typhon
     runs-on: self-hosted
     strategy:
@@ -21,4 +21,4 @@ jobs:
         run: |
           export IPINFO_CREDENTIALS=${{ secrets.IPINFO_API_KEY }}
           conda activate s3_logs_cron
-          s3logextraction update ip coordinates
+          s3logextraction update ip regions
