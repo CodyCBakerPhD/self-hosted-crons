@@ -51,7 +51,7 @@ jobs:
       IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
 
   GenerateDandisetSummaries:
-    uses: ./.github/workflows/generate-dandiset-totals.yml
+    uses: ./.github/workflows/generate-dandiset-summaries.yml
     needs: UpdateRegionCoordinates
 
   GenerateArchiveTotals:
