@@ -1,0 +1,21 @@
+name: Generate Dandiset totals
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+
+  run:
+    # Will read on PR dashboard as 'Deploy / GenerateDandisetTotals / Typhon'
+    # Action dashboard identified by 'Generate Dandiset totals'
+    # Requirement settings identified as 'GenerateDandisetTotals / Typhon'
+    name: Typhon
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Generate Dandiset totals
+        run: |
+          conda activate s3_logs_cron
+          s3logextraction update totals --mode dandi
