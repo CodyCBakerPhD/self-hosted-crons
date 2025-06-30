@@ -17,5 +17,5 @@ jobs:
     steps:
       - name: Generate Dandiset totals
         run: |
-          conda activate s3_logs_cron
+          source /data/dandi/s3-logs/conda/bin/activate s3_logs_cron
           s3logextraction update totals --mode dandi
