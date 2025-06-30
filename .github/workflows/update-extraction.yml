@@ -2,7 +2,7 @@ name: Update extracted log data
 on:
   workflow_call:
     secrets:
-      OPENCAGE_API_KEY:
+      S3_LOG_EXTRACTION_PASSWORD:
         required: true
 
 jobs:
