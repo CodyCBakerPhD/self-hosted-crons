@@ -1,0 +1,24 @@
+name: Update IP regions
+on:
+  workflow_call:
+    secrets:
+      IPINFO_API_KEY:
+        required: true
+
+jobs:
+
+  run:
+    # Will read on PR dashboard as 'Deploy / Update / Typhon'
+    # Action dashboard identified by 'Update IP regions'
+    # Requirement settings identified as 'UpdateRegions / Typhon'
+    name: Typhon
+    runs-on: self-hosted
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Update region codes to coordinates
+        run: |
+          export IPINFO_CREDENTIALS=${{ secrets.IPINFO_API_KEY }}
+          conda activate s3_logs_cron
+          s3logextraction update ip coordinates
