@@ -21,4 +21,4 @@ jobs:
         run: |
           export S3_LOG_EXTRACTION_PASSWORD=${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
           conda activate s3_logs_cron
-          s3logextraction extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 250000
+          s3logextraction extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 75000
