@@ -1,4 +1,4 @@
-name: Update archive summaries
+name: Generate archive totals
 on:
   workflow_call:
   workflow_dispatch:
@@ -6,18 +6,16 @@ on:
 jobs:
 
   run:
-    # Will read on PR dashboard as 'Deploy / UpdateArchiveSummaries / Drogon'
-    # Action dashboard identified by 'Update archive summaries'
-    # Requirement settings identified as 'UpdateArchiveSummaries / Drogon'
-    name: Drogon
+    # Will read on PR dashboard as 'Deploy / GenerateArchiveTotals / Typhon'
+    # Action dashboard identified by 'Generate archive totals'
+    # Requirement settings identified as 'GenerateArchiveTotals / Typhon'
+    name: Typhon
     runs-on: self-hosted
     strategy:
       fail-fast: false
 
     steps:
-      - name: Update archive summaries
+      - name: Generate archive totals
         run: |
-          source /home/dandi/miniconda3/etc/profile.d/conda.sh
           conda activate s3_logs_cron
-          generate_archive_summaries \
-            --mapped_s3_logs_folder_path /mnt/backup/dandi/dandiarchive-logs-mapped.cbaker239
+          s3logextraction update summaries --mode archive
