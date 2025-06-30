@@ -2,7 +2,7 @@ name: Update IP indexes
 on:
   workflow_call:
     secrets:
-      S3_LOG_EXTRACTION_PASSWORD :
+      S3_LOG_EXTRACTION_PASSWORD:
         required: true
 
 jobs:
