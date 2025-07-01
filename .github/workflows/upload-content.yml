@@ -22,17 +22,17 @@ jobs:
         source /data/dandi/s3-logs/conda/bin/activate s3_logs_cron
         cd /data/dandi/s3-logs/extraction_cache/summaries
         find . -type f -name '*.tsv' -exec cp --parents {} /data/dandi/s3-logs/access-summaries/content/summaries/ \;
-        find . -type f -name '*.json' -exec cp --parents {} /data/dandi/s3-logs/access-summaries/content/summaries/ \;
+        cp ./archive_totals.json /data/dandi/s3-logs/access-summaries/content
         cp ./totals.json /data/dandi/s3-logs/access-summaries/content
+        cp \
+          /data/dandi/s3-logs/extraction_cache/ips/region_codes_to_coordinates.yaml \
+          /data/dandi/s3-logs/access-summaries/content/region_codes_to_coordinates.yaml
         cd /data/dandi/s3-logs/access-summaries
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git remote set-url origin https://x-access-token:${{ secrets._GITHUB_API_KEY }}@github.com/dandi/access-summaries.git
         git pull
         git branch
-        cp \
-          /data/dandi/s3-logs/extraction_cache/ips/region_codes_to_coordinates.yaml \
-          /data/dandi/s3-logs/access-summaries/content/region_codes_to_coordinates.yaml
         git status
         git add content
         git commit -m "update S3 access summary content" || true
