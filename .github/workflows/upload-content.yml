@@ -27,7 +27,7 @@ jobs:
         cd /data/dandi/s3-logs/access-summaries
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git remote set-url origin https://x-access-token:${{ secrets._GITHUB_API_KEY }}@github.com/CodyCBakerPhD/self-hosted-crons.git
+        git remote set-url origin https://x-access-token:${{ secrets._GITHUB_API_KEY }}@github.com/dandi/access-summaries.git
         git pull
         git branch
         cp \
