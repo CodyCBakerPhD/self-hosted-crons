@@ -2,7 +2,8 @@ name: Deploy Typhon CRON
 
 on:
   schedule:
-    - cron: "0 6 * * *"  # Daily at 2am EST
+    - cron: "0 6 * * *"   # 2am EST
+    - cron: "0 18 * * *"  # 2pm EST
   workflow_dispatch:
 
 concurrency:
