@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Update region codes to coordinates
+      - name: Update IP indexes and index files
         run: |
           export S3_LOG_EXTRACTION_PASSWORD=${{ secrets.S3_LOG_EXTRACTION_PASSWORD  }}
           source /data/dandi/s3-logs/conda/bin/activate s3_logs_cron
