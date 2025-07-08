@@ -19,7 +19,7 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Update region codes to coordinates
+      - name: Update IP index to region codes
         run: |
           export S3_LOG_EXTRACTION_PASSWORD=${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
           export IPINFO_API_KEY=${{ secrets.IPINFO_API_KEY }}
