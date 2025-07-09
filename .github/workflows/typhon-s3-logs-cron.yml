@@ -30,11 +30,11 @@ jobs:
     secrets:
       S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
-  UpdateIpIndexes:
-    uses: ./.github/workflows/update-ip-indexes.yml
-    needs: UpdateExtraction
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+  #UpdateIpIndexes:
+  #  uses: ./.github/workflows/update-ip-indexes.yml
+  #  needs: UpdateExtraction
+  #  secrets:
+  #    S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
   UpdateIpRegions:
     uses: ./.github/workflows/update-ip-regions.yml
