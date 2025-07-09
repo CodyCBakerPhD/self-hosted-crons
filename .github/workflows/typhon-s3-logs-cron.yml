@@ -38,7 +38,7 @@ jobs:
 
   UpdateIpRegions:
     uses: ./.github/workflows/update-ip-regions.yml
-    needs: UpdateIpIndexes
+    needs: UpdateExtraction
     secrets:
       S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
       IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
