@@ -8,9 +8,7 @@ on:
 jobs:
 
   run:
-    # Will read on PR dashboard as 'Deploy / GenerateDandisetSummaries / Typhon'
-    # Action dashboard identified by 'Generate Dandiset summaries'
-    # Requirement settings identified as 'GenerateDandisetSummaries / Typhon'
+    # Action dashboard identified by 'Generate microscopy summaries'
     name: Typhon
     runs-on: self-hosted
     strategy:
