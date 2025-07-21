@@ -24,12 +24,17 @@ jobs:
           cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup2
           cp -r /data/dandi/s3-logs/extraction_cache/extraction /data/dandi/s3-logs/extraction_cache/extraction.backup2
 
-      - name: Remove previous backup
+      - name: Rename previous backup
         run: |
-          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup
-          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup
+          mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup3
+          mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup3
 
       - name: Rename backup2
         run: |
           mv /data/dandi/s3-logs/extraction_cache/records.backup2 /data/dandi/s3-logs/extraction_cache/records.backup
           mv /data/dandi/s3-logs/extraction_cache/extraction.backup2 /data/dandi/s3-logs/extraction_cache/extraction.backup
+
+      - name: Remove previous backup
+        run: |
+          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup3
+          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup3
