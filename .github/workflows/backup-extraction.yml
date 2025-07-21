@@ -16,8 +16,8 @@ jobs:
     steps:
       - name: Remove any previous backup2
         run: |
-          rm -r /data/dandi/s3-logs/extraction_cache/records.backup2
-          rm -r /data/dandi/s3-logs/extraction_cache/extraction.backup2
+          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
+          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2
     
       - name: Copy backup to backup2
         run: |
@@ -26,8 +26,8 @@ jobs:
 
       - name: Remove previous backup
         run: |
-          rm -r /data/dandi/s3-logs/extraction_cache/records.backup
-          rm -r /data/dandi/s3-logs/extraction_cache/extraction.backup
+          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup
+          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup
 
       - name: Rename backup2
         run: |
