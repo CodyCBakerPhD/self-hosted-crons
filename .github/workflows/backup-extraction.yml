@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  run:
+  Backup:
     # Action dashboard identified by 'Backup extraction'
     name: Typhon
     runs-on: self-hosted
@@ -28,3 +28,22 @@ jobs:
         run: |
           rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
           rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2
+
+  NotifyOnFailure:
+    if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
+    needs: [Backup]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "Typhon S3 Log Extraction Backup Failed"
+          to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
+          from: Typhon CRON
+          body: |
+            The scheduled run of S3 log extraction backup encountered an issue, please check status at
+            https://github.com/CodyCBakerPhD/self-hosted-crons/.github/workflows/backup-extraction.yml
