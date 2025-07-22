@@ -14,27 +14,17 @@ jobs:
       fail-fast: false
 
     steps:
-      - name: Remove any previous backup2
+      - name: Bump previous backup, if any
         run: |
-          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
-          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2
+          [ -e source_file.txt ] && mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup2
+          [ -e source_file.txt ] && mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup2
     
-      - name: Copy backup to backup2
+      - name: Generate fresh backup
         run: |
-          cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup2
-          cp -r /data/dandi/s3-logs/extraction_cache/extraction /data/dandi/s3-logs/extraction_cache/extraction.backup2
-
-      - name: Rename previous backup
-        run: |
-          mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup3
-          mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup3
-
-      - name: Rename backup2
-        run: |
-          mv /data/dandi/s3-logs/extraction_cache/records.backup2 /data/dandi/s3-logs/extraction_cache/records.backup
-          mv /data/dandi/s3-logs/extraction_cache/extraction.backup2 /data/dandi/s3-logs/extraction_cache/extraction.backup
+          cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
+          cp -r /data/dandi/s3-logs/extraction_cache/extraction /data/dandi/s3-logs/extraction_cache/extraction.backup
 
       - name: Remove previous backup
         run: |
-          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup3
-          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup3
+          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
+          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2
