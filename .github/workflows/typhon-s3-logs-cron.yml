@@ -34,7 +34,7 @@ jobs:
 
   GenerateDandisetSummaries:
     uses: ./.github/workflows/generate-dandiset-summaries.yml
-    needs: UpdateRegionCoordinates
+    needs: UpdateExtraction
 
   GenerateArchiveSummaries:
     uses: ./.github/workflows/generate-archive-summaries.yml
