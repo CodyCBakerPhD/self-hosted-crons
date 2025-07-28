@@ -32,13 +32,6 @@ jobs:
 
 
 
-  UpdateRegionCoordinates:
-    uses: ./.github/workflows/update-region-coordinates.yml
-    needs: UpdateExtraction
-    secrets:
-      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
-      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-
   GenerateDandisetSummaries:
     uses: ./.github/workflows/generate-dandiset-summaries.yml
     needs: UpdateRegionCoordinates
