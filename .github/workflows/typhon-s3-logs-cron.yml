@@ -30,11 +30,29 @@ jobs:
     secrets:
       S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
+  UpdateIpIndexes:
+    uses: ./.github/workflows/update-ip-indexes.yml
+    needs: UpdateExtraction
+    secrets:
+      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
+  UpdateIpRegions:
+    uses: ./.github/workflows/update-ip-regions.yml
+    needs: UpdateIpIndexes
+    secrets:
+      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+
+  UpdateRegionCoordinates:
+    uses: ./.github/workflows/update-region-coordinates.yml
+    needs: UpdateIpRegions
+    secrets:
+      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
 
   GenerateDandisetSummaries:
     uses: ./.github/workflows/generate-dandiset-summaries.yml
-    needs: UpdateExtraction
+    needs: UpdateRegionCoordinates
 
   GenerateArchiveSummaries:
     uses: ./.github/workflows/generate-archive-summaries.yml
