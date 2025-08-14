@@ -89,4 +89,4 @@ jobs:
           from: Typhon CRON
           body: |
             The scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/.github/workflows/typhon-s3-logs-cron.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/typhon-s3-logs-cron.yml
