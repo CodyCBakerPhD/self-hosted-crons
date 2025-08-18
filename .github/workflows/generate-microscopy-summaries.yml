@@ -2,7 +2,7 @@
 name: Generate microscopy summaries
 on:
   schedule:
-    - cron: "0 6 * * 1"   # 2am EST every monday
+    - cron: "0 6 * * 1"  # 2am EST every Monday
   workflow_dispatch:
 
 jobs:
