@@ -22,13 +22,13 @@ jobs:
     
       - name: Generate fresh backup
         run: |
-          cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
-          cp -r /data/dandi/s3-logs/extraction_cache/extraction /data/dandi/s3-logs/extraction_cache/extraction.backup
+          cp -vr /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
+          cp -vr /data/dandi/s3-logs/extraction_cache/extraction /data/dandi/s3-logs/extraction_cache/extraction.backup
 
       - name: Remove previous backup
         run: |
-          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
-          rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2
+          rm -vrf /data/dandi/s3-logs/extraction_cache/records.backup2
+          rm -vrf /data/dandi/s3-logs/extraction_cache/extraction.backup2
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
