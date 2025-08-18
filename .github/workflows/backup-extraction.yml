@@ -10,6 +10,7 @@ jobs:
     # Action dashboard identified by 'Backup extraction'
     name: Typhon
     runs-on: self-hosted
+    timeout-minutes: 720
     strategy:
       fail-fast: false
 
