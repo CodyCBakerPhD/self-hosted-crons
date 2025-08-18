@@ -1,7 +1,7 @@
 name: Backup extraction
 on:
   schedule:
-    - cron: "0 10 * * 1"   # 6am EST every monday
+    - cron: "0 6 * * 6"  # 2am EST every Saturday
   workflow_dispatch:
 
 jobs:
