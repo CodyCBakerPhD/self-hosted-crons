@@ -46,4 +46,4 @@ jobs:
           from: Typhon CRON
           body: |
             The scheduled run of S3 log extraction backup encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/.github/workflows/backup-extraction.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/backup-extraction.yml
