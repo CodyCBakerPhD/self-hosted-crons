@@ -38,9 +38,9 @@ jobs:
           rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
           for head in {0..9} {a..f}; do
             echo Cleaning .backup2/blobs/$head...
-            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/blobs/$head*
+            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/blobs/$head* || true
             echo Cleaning .backup2/zarr/$head...
-            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/zarr/$head*
+            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/zarr/$head* || true
           done
 
   NotifyOnFailure:
