@@ -23,9 +23,9 @@ jobs:
       - name: Generate fresh backup
         run: |
           cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
-          mkdir extraction.backup
-          mkdir extraction.backup/blobs
-          mkdir extraction.backup/zarr
+          mkdir extraction.backup 2>/dev/null
+          mkdir extraction.backup/blobs 2>/dev/null
+          mkdir extraction.backup/zarr 2>/dev/null
           for head in {0..9} {a..f}; do
             echo Copying blobs/$head...
             cp -r /data/dandi/s3-logs/extraction_cache/extraction/blobs/$head* /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs/
@@ -38,9 +38,9 @@ jobs:
           rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
           for head in {0..9} {a..f}; do
             echo Cleaning .backup2/blobs/$head...
-            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/blobs/$head* || true
+            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/blobs/$head* 2>/dev/null
             echo Cleaning .backup2/zarr/$head...
-            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/zarr/$head* || true
+            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/zarr/$head* 2>/dev/null
           done
 
   NotifyOnFailure:
