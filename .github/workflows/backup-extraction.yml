@@ -24,9 +24,9 @@ jobs:
         run: |
           pwd
           cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
-          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup
-          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs
-          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup/zarr
+          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup || true
+          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs  || true
+          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup/zarr  || true
           for head in {0..9} {a..f}; do
             echo Copying blobs/$head...
             cp -r /data/dandi/s3-logs/extraction_cache/extraction/blobs/$head* /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs/
