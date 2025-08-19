@@ -22,13 +22,26 @@ jobs:
     
       - name: Generate fresh backup
         run: |
-          cp -vr /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
-          cp -vr /data/dandi/s3-logs/extraction_cache/extraction /data/dandi/s3-logs/extraction_cache/extraction.backup
+          cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
+          mkdir extraction.backup
+          mkdir extraction.backup/blobs
+          mkdir extraction.backup/zarr
+          for head in {0..9} {a..f}; do
+            echo Copying blobs/$head...
+            cp -r /data/dandi/s3-logs/extraction_cache/extraction/blobs/$head* /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs/
+            echo Copying zarr/$head...
+            cp -r /data/dandi/s3-logs/extraction_cache/extraction/zarr/$head* /data/dandi/s3-logs/extraction_cache/extraction.backup/zarr/
+          done
 
       - name: Remove previous backup
         run: |
-          rm -vrf /data/dandi/s3-logs/extraction_cache/records.backup2
-          rm -vrf /data/dandi/s3-logs/extraction_cache/extraction.backup2
+          rm -rf /data/dandi/s3-logs/extraction_cache/records.backup2
+          for head in {0..9} {a..f}; do
+            echo Cleaning .backup2/blobs/$head...
+            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/blobs/$head*
+            echo Cleaning .backup2/zarr/$head...
+            rm -rf /data/dandi/s3-logs/extraction_cache/extraction.backup2/zarr/$head*
+          done
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
