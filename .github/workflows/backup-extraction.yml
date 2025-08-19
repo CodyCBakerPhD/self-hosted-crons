@@ -17,15 +17,16 @@ jobs:
     steps:
       - name: Bump previous backup, if any
         run: |
-          [ -e /data/dandi/s3-logs/extraction_cache/records.backup ] && mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup2 || true
-          [ -e /data/dandi/s3-logs/extraction_cache/extraction.backup ] && mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup2 || true
+          [ -e /data/dandi/s3-logs/extraction_cache/records.backup ] && mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup2 2>/dev/null
+          [ -e /data/dandi/s3-logs/extraction_cache/extraction.backup ] && mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup2 2>/dev/null
     
       - name: Generate fresh backup
         run: |
+          pwd
           cp -r /data/dandi/s3-logs/extraction_cache/records /data/dandi/s3-logs/extraction_cache/records.backup
-          mkdir extraction.backup 2>/dev/null
-          mkdir extraction.backup/blobs 2>/dev/null
-          mkdir extraction.backup/zarr 2>/dev/null
+          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup
+          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs
+          mkdir /data/dandi/s3-logs/extraction_cache/extraction.backup/zarr
           for head in {0..9} {a..f}; do
             echo Copying blobs/$head...
             cp -r /data/dandi/s3-logs/extraction_cache/extraction/blobs/$head* /data/dandi/s3-logs/extraction_cache/extraction.backup/blobs/
