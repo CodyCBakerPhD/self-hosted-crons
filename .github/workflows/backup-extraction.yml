@@ -17,8 +17,8 @@ jobs:
     steps:
       - name: Bump previous backup, if any
         run: |
-          [ -e /data/dandi/s3-logs/extraction_cache/records.backup ] && mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup2 2>/dev/null
-          [ -e /data/dandi/s3-logs/extraction_cache/extraction.backup ] && mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup2 2>/dev/null
+          [ -e /data/dandi/s3-logs/extraction_cache/records.backup ] && mv /data/dandi/s3-logs/extraction_cache/records.backup /data/dandi/s3-logs/extraction_cache/records.backup2 || true
+          [ -e /data/dandi/s3-logs/extraction_cache/extraction.backup ] && mv /data/dandi/s3-logs/extraction_cache/extraction.backup /data/dandi/s3-logs/extraction_cache/extraction.backup2 || true
     
       - name: Generate fresh backup
         run: |
