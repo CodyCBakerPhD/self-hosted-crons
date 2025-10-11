@@ -36,11 +36,13 @@ jobs:
       - name: Update BIDS-Dandisets
         run: |
           source /data/dandi/s3-logs/conda/bin/activate bids_dandisets
-          git clone https://github.com/bids-dandisets/scripts.git
-          pip install -e git+https://github.com/con/nwb2bids@main#egg=nwb2bids[dandi] --upgrade
-          python scripts/scripts/parallel_generate.py
-          cat ./.parallel_logs/*.log || echo "No errors found in logs."
-          rm -rf ./.parallel_logs
+          cd /data/dandi/bids-dandisets/scripts
+          git pull
+          cd /data/dandi/bids-dandisets/nwb2bids
+          git pull
+          python /data/dandi/bids-dandisets/scripts/scripts/parallel_generate.py
+          cat /data/dandi/bids-dandisets/scripts/.parallel_logs/*.log || echo "No errors found in logs."
+          rm -rf /data/dandi/bids-dandisets/scripts/.parallel_logs
         env:
           SANITIZATION_LEVEL: 0
 
