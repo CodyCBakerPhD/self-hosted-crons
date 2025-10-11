@@ -29,7 +29,7 @@ jobs:
         run: pip install -e git+https://github.com/con/nwb2bids@main#egg=nwb2bids[dandi]
 
       - name: Run generation script
-        run: python bids-dandisets/scripts/parallel_generate.py
+        run: python scripts/parallel_generate.py
         #run: python ./bids-dandisets/scripts/generate.py
         env:
           SANITIZATION_LEVEL: 0
