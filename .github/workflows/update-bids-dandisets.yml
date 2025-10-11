@@ -2,7 +2,7 @@ name: Update BIDS Dandisets
 
 on:
   schedule:
-    - cron: "0 */4 * * *"  # every 4 hours
+    - cron: "0 0 * * *"  # 7pm EST
   workflow_dispatch:
 
 concurrency:
