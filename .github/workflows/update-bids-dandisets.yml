@@ -33,25 +33,16 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.13
-    
-      - name: Clone package with script
-        run: git clone https://github.com/bids-dandisets/scripts.git
-
-      - name: Install package
-        run: pip install -e git+https://github.com/con/nwb2bids@main#egg=nwb2bids[dandi]
-
-      - name: Run generation script
-        run: python scripts/scripts/parallel_generate.py
-        #run: python ./bids-dandisets/scripts/generate.py
+      - name: Update BIDS-Dandisets
+        run: |
+          source /data/dandi/s3-logs/conda/bin/activate bids_dandisets
+          git clone https://github.com/bids-dandisets/scripts.git
+          pip install -e git+https://github.com/con/nwb2bids@main#egg=nwb2bids[dandi] --upgrade
+          python scripts/scripts/parallel_generate.py
+          cat ./.parallel_logs/*.log || echo "No errors found in logs."
+          rm -rf ./.parallel_logs
         env:
           SANITIZATION_LEVEL: 0
-
-      - name: Printout all errors from parallel logs
-        run: cat ./.parallel_logs/*.log || echo "No errors found in logs."
 
 #      - name: Run generation script with minimal sanitization
 #        run: python scripts/parallel_generate.py
