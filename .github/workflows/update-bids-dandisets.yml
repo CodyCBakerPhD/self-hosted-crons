@@ -13,8 +13,24 @@ env:
   _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
 
 jobs:
-  UpdateBidsDandisets:
+  CheckTyphon:
+    name: Pre-run Check
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          label: typhon
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  UpdateBidsDandisets:
+    needs: CheckTyphon
+    name: Typhon
+    runs-on: self-hosted
 
     steps:
       - name: Setup Python
