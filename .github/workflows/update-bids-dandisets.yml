@@ -45,6 +45,7 @@ jobs:
           #python /data/dandi/bids-dandisets/scripts/scripts/parallel_generate.py
           #cat /data/dandi/bids-dandisets/scripts/.parallel_logs/*.log || echo "No errors found in logs."
         env:
+          LIMIT_SESSIONS: 5
           SANITIZATION_LEVEL: 0
 
 #      - name: Run generation script with minimal sanitization
