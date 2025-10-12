@@ -43,7 +43,6 @@ jobs:
           cd /data/dandi/bids-dandisets
           python /data/dandi/bids-dandisets/scripts/scripts/parallel_generate.py
           cat /data/dandi/bids-dandisets/scripts/.parallel_logs/*.log || echo "No errors found in logs."
-          rm -rf /data/dandi/bids-dandisets/scripts/.parallel_logs
         env:
           SANITIZATION_LEVEL: 0
 
