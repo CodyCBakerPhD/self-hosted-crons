@@ -1,4 +1,4 @@
-name: Deploy Typhon CRON
+name: Deploy DANDI Access Logs (Typhon CRON)
 
 on:
   schedule:
