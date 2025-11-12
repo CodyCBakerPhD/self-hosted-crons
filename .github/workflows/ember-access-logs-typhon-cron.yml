@@ -1,8 +1,8 @@
 name: Deploy EMBER Access Logs (Typhon CRON)
 
 on:
-  schedule:
-    - cron: "0 8 * * *"  # 4am EST
+#  schedule:
+#    - cron: "0 8 * * *"  # 4am EST
   workflow_dispatch:
 
 concurrency:
@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/check-runner
         with:
           org: CodyCBakerPhD/self-hosted-crons
-          label: typhon-ember
+          label: ember
           token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateExtraction:
