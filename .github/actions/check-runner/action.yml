@@ -5,8 +5,8 @@ inputs:
   org:
     description: "GitHub organization or repository (org or owner/repo)"
     required: true
-  label:
-    description: "Runner label"
+  labels:
+    description: "Runner labels (comma-separated, no spaces)"
     required: true
   token:
     description: "GitHub token"
@@ -21,7 +21,7 @@ runs:
       run: |
         set -e
         export GH_TOKEN="${{ inputs.token }}"
-        output=$("$GITHUB_ACTION_PATH/script.sh" "${{ inputs.org }}" "${{ inputs.label }}")
+        output=$("$GITHUB_ACTION_PATH/script.sh" "${{ inputs.org }}" "${{ inputs.labels }}")
         echo "Runner check output: $output"
         if [[ "$output" != "true" ]]; then
           echo "Runner is offline. Triggering failure in workflow."

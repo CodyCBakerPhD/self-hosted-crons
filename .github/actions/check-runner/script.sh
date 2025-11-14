@@ -1,12 +1,12 @@
 #!/bin/bash
 
 if [ -z "$1" ] || [ -z "$2" ]; then
-  echo "Usage: $0 <org_or_repo> <label>"
+  echo "Usage: $0 <org_or_repo> <labels_comma_separated>"
   exit 1
 fi
 
 target="$1"
-label="$2"
+labels="$2"
 
 if ! command -v gh &> /dev/null; then
   echo "Error: GitHub CLI (gh) is not installed." >&2
@@ -22,8 +22,18 @@ if [ $? -ne 0 ]; then
   echo "Error: API call failed at $endpoint" >&2
   exit 1
 fi
-available=$(echo "$response" | jq -r --arg label "$label" '
-  .runners[] | select(.status == "online" and (.labels[].name == $label))')
+
+# Split labels by comma into an array
+IFS=',' read -ra label_array <<< "$labels"
+
+# Build jq filter to check if runner has all required labels
+available=$(echo "$response" | jq -r --argjson required_labels "$(printf '%s\n' "${label_array[@]}" | jq -R . | jq -s .)" '
+  .runners[] | select(.status == "online") | 
+  select(
+    ([.labels[].name] as $runner_labels |
+     $required_labels | all(. as $req | $runner_labels | contains([$req])))
+  )')
+
 if [ -n "$available" ]; then
   echo "true"
 else
