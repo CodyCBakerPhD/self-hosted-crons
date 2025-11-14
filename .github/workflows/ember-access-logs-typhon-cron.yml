@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  conda_base_path: "/data/ember/s3-logs/conda"
+  conda_env_name: "s3_logs_cron"
+
 jobs:
   CheckTyphon:
     name: Pre-run Check
@@ -25,52 +29,60 @@ jobs:
           token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateExtraction:
-    uses: ./.github/workflows/update-extraction.yml
     needs: CheckTyphon
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD_EMBER }}
+    name: Run extraction update
+    runs-on: [self-hosted, ember]
 
-  UpdateIpIndexes:
-    uses: ./.github/workflows/update-ip-indexes.yml
-    needs: UpdateExtraction
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD_EMBER }}
+    steps:
+      - uses: ./.github/actions/run-s3logextraction
+        with:
+          conda_base_path: ${{ env.conda_base_path }}
+          conda_env_name: ${{ env.conda_env_name }}
+          command: "update extraction"
+        env:
+          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.EMBER_S3_LOG_EXTRACTION_PASSWORD }}
 
-  UpdateIpRegions:
-    uses: ./.github/workflows/update-ip-regions.yml
-    needs: UpdateIpIndexes
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD_EMBER }}
-      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-
-  UpdateRegionCoordinates:
-    uses: ./.github/workflows/update-region-coordinates.yml
-    needs: UpdateIpRegions
-    secrets:
-      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
-      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-
-  GenerateDandisetSummaries:
-    uses: ./.github/workflows/generate-dandiset-summaries.yml
-    needs: UpdateRegionCoordinates
-
-  GenerateArchiveSummaries:
-    uses: ./.github/workflows/generate-archive-summaries.yml
-    needs: GenerateDandisetSummaries
-
-  GenerateDandisetTotals:
-    uses: ./.github/workflows/generate-dandiset-totals.yml
-    needs: GenerateArchiveSummaries
-
-  GenerateArchiveTotals:
-    uses: ./.github/workflows/generate-archive-totals.yml
-    needs: GenerateDandisetTotals
-
-  UploadContent:
-    uses: ./.github/workflows/upload-content.yml
-    needs: GenerateArchiveTotals
-    secrets:
-      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
+#  UpdateIpIndexes:
+#    uses: ./.github/workflows/update-ip-indexes.yml
+#    needs: UpdateExtraction
+#    secrets:
+#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD_EMBER }}
+#
+#  UpdateIpRegions:
+#    uses: ./.github/workflows/update-ip-regions.yml
+#    needs: UpdateIpIndexes
+#    secrets:
+#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD_EMBER }}
+#      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+#
+#  UpdateRegionCoordinates:
+#    uses: ./.github/workflows/update-region-coordinates.yml
+#    needs: UpdateIpRegions
+#    secrets:
+#      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+#      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+#
+#  GenerateDandisetSummaries:
+#    uses: ./.github/workflows/generate-dandiset-summaries.yml
+#    needs: UpdateRegionCoordinates
+#
+#  GenerateArchiveSummaries:
+#    uses: ./.github/workflows/generate-archive-summaries.yml
+#    needs: GenerateDandisetSummaries
+#
+#  GenerateDandisetTotals:
+#    uses: ./.github/workflows/generate-dandiset-totals.yml
+#    needs: GenerateArchiveSummaries
+#
+#  GenerateArchiveTotals:
+#    uses: ./.github/workflows/generate-archive-totals.yml
+#    needs: GenerateDandisetTotals
+#
+#  UploadContent:
+#    uses: ./.github/workflows/upload-content.yml
+#    needs: GenerateArchiveTotals
+#    secrets:
+#      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
