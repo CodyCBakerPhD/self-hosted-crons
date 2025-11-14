@@ -35,7 +35,7 @@ jobs:
 #      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
     needs: CheckTyphon
     name: Run extraction update
-    runs-on: [self-hosted, typhon, ember]
+    runs-on: [self-hosted, typhon, dandi]
 
     steps:
       - uses: actions/checkout@v4
