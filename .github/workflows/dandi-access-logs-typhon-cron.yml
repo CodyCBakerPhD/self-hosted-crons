@@ -2,7 +2,7 @@ name: Deploy DANDI Access Logs (Typhon CRON)
 
 on:
   schedule:
-    - cron: "0 8 * * *"  # 4am EST
+    - cron: "0 10 * * *"  # ~6am ET
   workflow_dispatch:
 
 concurrency:
@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/check-runner
         with:
           org: CodyCBakerPhD/self-hosted-crons
-          label: typhon
+          label: dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateExtraction:

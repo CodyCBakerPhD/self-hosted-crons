@@ -25,13 +25,13 @@ jobs:
         uses: ./.github/actions/check-runner
         with:
           org: CodyCBakerPhD/self-hosted-crons
-          label: ember
+          label: typhon,ember
           token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateExtraction:
     needs: CheckTyphon
     name: Run extraction update
-    runs-on: [self-hosted, ember]
+    runs-on: [self-hosted, typhon, ember]
 
     steps:
       - uses: actions/checkout@v4

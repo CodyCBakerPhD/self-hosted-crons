@@ -12,9 +12,7 @@ jobs:
     # Action dashboard identified by 'Update extracted log data'
     # Requirement settings identified as 'UpdateExtraction / Typhon'
     name: Typhon
-    runs-on: self-hosted
-    strategy:
-      fail-fast: false
+    runs-on: [self-hosted, typhon, dandi]
 
     steps:
       - name: Update extracted data
