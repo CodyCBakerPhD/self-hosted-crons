@@ -43,7 +43,7 @@ jobs:
           command: extract s3://ember-open-data-logs/650477180493/us-east-1/ember-open-data/
           flags: --mode dandi-remote --manifest /data/ember/s3-logs/extraction_cache/manifest_parsed.json
         env:
-          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.EMBER_S3_LOG_EXTRACTION_PASSWORD }}
+          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
 #  UpdateIpIndexes:
 #    uses: ./.github/workflows/update-ip-indexes.yml
