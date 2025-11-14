@@ -34,6 +34,8 @@ jobs:
     runs-on: [self-hosted, ember]
 
     steps:
+      - uses: actions/checkout@v4
+
       - uses: ./.github/actions/run-s3logextraction
         with:
           conda_base_path: ${{ env.conda_base_path }}
