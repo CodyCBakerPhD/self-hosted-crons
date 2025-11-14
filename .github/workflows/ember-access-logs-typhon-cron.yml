@@ -31,7 +31,7 @@ jobs:
   UpdateExtraction:
     needs: CheckTyphon
     name: Run extraction update
-    runs-on: [self-hosted, typhon-ember]
+    runs-on: [self-hosted, ember]
 
     steps:
       - uses: actions/checkout@v4
