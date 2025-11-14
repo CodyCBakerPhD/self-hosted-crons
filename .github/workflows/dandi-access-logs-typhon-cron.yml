@@ -25,10 +25,25 @@ jobs:
           token: ${{ secrets._GITHUB_API_KEY }}
 
   UpdateExtraction:
-    uses: ./.github/workflows/update-extraction.yml
+#    uses: ./.github/workflows/update-extraction.yml
+#    needs: CheckTyphon
+#    secrets:
+#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
     needs: CheckTyphon
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+    name: Run extraction update
+    runs-on: [self-hosted, typhon, ember]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/run-s3logextraction
+        with:
+          conda_base_path: ${{ env.conda_base_path }}
+          conda_env_name: ${{ env.conda_env_name }}
+          command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
+          flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
+        env:
+          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
   UpdateIpIndexes:
     uses: ./.github/workflows/update-ip-indexes.yml
