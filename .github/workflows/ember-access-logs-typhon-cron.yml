@@ -31,7 +31,7 @@ jobs:
   UpdateExtraction:
     needs: CheckTyphon
     name: Run extraction update
-    runs-on: [self-hosted, ember]
+    runs-on: [self-hosted, typhon-ember]
 
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +40,10 @@ jobs:
         with:
           conda_base_path: ${{ env.conda_base_path }}
           conda_env_name: ${{ env.conda_env_name }}
-          command: "update extraction"
+          command: extract s3://ember-open-data-logs/???/us-east-1/ember-open-data/
+          flags: |
+            --mode dandi-remote --dandi-instance https://api.ember-dandi.org \
+            --manifest /data/ember/s3-logs/extraction_cache/manifest_parsed.json
         env:
           S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.EMBER_S3_LOG_EXTRACTION_PASSWORD }}
 
