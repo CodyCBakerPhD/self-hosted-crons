@@ -31,16 +31,16 @@ jobs:
           labels: typhon,dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  ProcessDandiAccessLogs:
+  ProcessAccessLogs:
     needs: CheckTyphon
-    name: Process DANDI access logs
+    name: Process access logs
     runs-on: [self-hosted, typhon, dandi]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run DANDI S3 log extraction
+      - name: Run primary S3 log extraction
         uses: ./.github/actions/run-s3logextraction
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
@@ -60,6 +60,31 @@ jobs:
         uses: ./.github/actions/run-s3logextraction
         with:
           command: update ip coordinates
+
+      - name: Generate Dandiset summaries
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update summaries
+          flags: --mode dandi --skip 000108
+
+      - name: Generate archive summaries
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update summaries
+          flags: --mode archive
+
+      - name: Generate Dandiset totals
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update totals
+          flags: --mode dandi
+
+      - name: Generate archive totals
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update totals
+          flags: --mode archive
+
 
 #  UpdateIpIndexes:
 #    uses: ./.github/workflows/update-ip-indexes.yml
