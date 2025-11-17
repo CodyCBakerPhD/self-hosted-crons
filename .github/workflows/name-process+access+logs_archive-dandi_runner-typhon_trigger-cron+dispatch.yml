@@ -1,13 +1,20 @@
-name: Deploy DANDI Access Logs (Typhon CRON)
+name: Deploy DANDI access logs (Typhon CRON)
 
 on:
   schedule:
-    - cron: "0 8 * * *"  # 4am EST
+    - cron: "0 10 * * *"  # ~6am ET
   workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
+
+env:
+  CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
+  CONDA_ENV_NAME: "s3_logs_cron"
+  S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+  IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+  OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
 
 jobs:
   CheckTyphon:
@@ -21,54 +28,66 @@ jobs:
         uses: ./.github/actions/check-runner
         with:
           org: CodyCBakerPhD/self-hosted-crons
-          label: typhon
+          labels: typhon,dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  UpdateExtraction:
-    uses: ./.github/workflows/update-extraction.yml
+  ProcessAccessLogs:
     needs: CheckTyphon
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+    name: Process access logs
+    runs-on: [self-hosted, typhon, dandi]
 
-  UpdateIpIndexes:
-    uses: ./.github/workflows/update-ip-indexes.yml
-    needs: UpdateExtraction
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  UpdateIpRegions:
-    uses: ./.github/workflows/update-ip-regions.yml
-    needs: UpdateIpIndexes
-    secrets:
-      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+      - name: Run primary S3 log extraction
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
+          flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
 
-  UpdateRegionCoordinates:
-    uses: ./.github/workflows/update-region-coordinates.yml
-    needs: UpdateIpRegions
-    secrets:
-      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
-      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+      - name: Update IP indexes
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update ip indexes
 
-  GenerateDandisetSummaries:
-    uses: ./.github/workflows/generate-dandiset-summaries.yml
-    needs: UpdateRegionCoordinates
+      - name: Update IP regions
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update ip regions
 
-  GenerateArchiveSummaries:
-    uses: ./.github/workflows/generate-archive-summaries.yml
-    needs: GenerateDandisetSummaries
+      - name: Update region coordinates
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update ip coordinates
 
-  GenerateDandisetTotals:
-    uses: ./.github/workflows/generate-dandiset-totals.yml
-    needs: GenerateArchiveSummaries
+      - name: Generate Dandiset summaries
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update summaries
+          flags: --mode dandi --skip 000108
 
-  GenerateArchiveTotals:
-    uses: ./.github/workflows/generate-archive-totals.yml
-    needs: GenerateDandisetTotals
+      - name: Generate archive summaries
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update summaries
+          flags: --mode archive
+
+      - name: Generate Dandiset totals
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update totals
+          flags: --mode dandi
+
+      - name: Generate archive totals
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update totals
+          flags: --mode archive
 
   UploadContent:
     uses: ./.github/workflows/upload-content.yml
-    needs: GenerateArchiveTotals
+    needs: ProcessAccessLogs
     secrets:
       _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
 
@@ -89,4 +108,4 @@ jobs:
           from: Typhon CRON
           body: |
             The scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/dandi-access-logs-typhon-cron.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-process+access+logs_archive-dandi_runner-typhon_trigger-cron+dispatch.yml

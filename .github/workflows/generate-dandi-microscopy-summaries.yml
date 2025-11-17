@@ -1,0 +1,37 @@
+# Separate action for the gargantuan dataset of DANDI:000108
+name: Generate DANDI microscopy summaries
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # 2am EST every Monday
+  workflow_dispatch:
+
+jobs:
+
+  CheckTyphon:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          labels: typhon,dandi
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  ProcessAccessLogs:
+    needs: CheckTyphon
+    name: Process access logs
+    runs-on: [self-hosted, typhon, dandi]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: "Generate DANDI:000108 summaries"
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          command: update summaries
+          flags: --mode dandi --pick 000108
