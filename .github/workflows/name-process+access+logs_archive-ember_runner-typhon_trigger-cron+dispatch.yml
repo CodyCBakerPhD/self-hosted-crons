@@ -65,7 +65,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction
         with:
           command: update summaries
-          flags: --mode dandi --skip 000108
+          flags: --mode dandi
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction
