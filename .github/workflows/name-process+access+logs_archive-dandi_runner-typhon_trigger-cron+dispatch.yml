@@ -85,52 +85,15 @@ jobs:
           command: update totals
           flags: --mode archive
 
-
-#  UpdateIpIndexes:
-#    uses: ./.github/workflows/update-ip-indexes.yml
-#    needs: UpdateExtraction
-#    secrets:
-#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-#
-#  UpdateIpRegions:
-#    uses: ./.github/workflows/update-ip-regions.yml
-#    needs: UpdateIpIndexes
-#    secrets:
-#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-#      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-
-#  UpdateRegionCoordinates:
-#    uses: ./.github/workflows/update-region-coordinates.yml
-#    needs: UpdateIpRegions
-#    secrets:
-#      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
-#      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-
-#  GenerateDandisetSummaries:
-#    uses: ./.github/workflows/generate-dandiset-summaries.yml
-#    needs: UpdateRegionCoordinates
-#
-#  GenerateArchiveSummaries:
-#    uses: ./.github/workflows/generate-archive-summaries.yml
-#    needs: GenerateDandisetSummaries
-#
-#  GenerateDandisetTotals:
-#    uses: ./.github/workflows/generate-dandiset-totals.yml
-#    needs: GenerateArchiveSummaries
-#
-#  GenerateArchiveTotals:
-#    uses: ./.github/workflows/generate-archive-totals.yml
-#    needs: GenerateDandisetTotals
-
-#  UploadContent:
-#    uses: ./.github/workflows/upload-content.yml
-#    needs: ProcessDandiAccessLogs
-#    secrets:
-#      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
+  UploadContent:
+    uses: ./.github/workflows/upload-content.yml
+    needs: ProcessAccessLogs
+    secrets:
+      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckTyphon, ProcessAccessLogs]
+    needs: [CheckTyphon, UploadContent]
     runs-on: ubuntu-latest
     steps:
       - name: Send email notification on failure
@@ -145,4 +108,4 @@ jobs:
           from: Typhon CRON
           body: |
             The scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/dandi-access-logs-typhon-cron.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-process+access+logs_archive-dandi_runner-typhon_trigger-cron+dispatch.yml
