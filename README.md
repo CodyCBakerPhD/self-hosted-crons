@@ -12,7 +12,7 @@ cd /mnt/backup/dandi/dandiarchive-logs-cody/self_hosted_runner/actions-runner
 ./run.cmd
 ```
 
-Which should trigger on restart of Drogon via:
+Which should trigger on restart via:
 
 ```bash
 crontab -e
