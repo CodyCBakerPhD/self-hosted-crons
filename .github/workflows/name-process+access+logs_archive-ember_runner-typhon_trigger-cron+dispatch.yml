@@ -65,7 +65,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction
         with:
           command: update summaries
-          flags: --mode dandi
+          flags: --mode dandi --api-url https://api-dandi.emberarchive.org/api
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction
