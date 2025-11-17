@@ -26,5 +26,5 @@ runs:
       run: |
         echo conda_base_path
         echo $conda_base_path
-#        source ${{ inputs.conda_base_path }}/bin/activate ${{ inputs.conda_env_name }}
+        # source ${{ inputs.conda_base_path }}/bin/activate ${{ inputs.conda_env_name }}
         s3logextraction ${{ inputs.command }} ${{ inputs.flags }}
