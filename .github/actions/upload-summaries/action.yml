@@ -23,7 +23,8 @@ runs:
         
         cd ${{ inputs.extraction_cache_path }}/summaries 
         
-        mkdir -p ${{ inputs.repository_path }}/content/summaries
+        mkdir ${{ inputs.repository_path }}/content || true
+        mkdir ${{ inputs.repository_path }}/content/summaries || true
         find . -type f -name '*.tsv' -exec cp --parents {} ${{ inputs.repository_path }}/content/summaries/  \;
         
         cp ./archive_totals.json ${{ inputs.repository_content_path }}/content
