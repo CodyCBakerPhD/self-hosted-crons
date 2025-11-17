@@ -27,7 +27,7 @@ runs:
         mkdir ${{ inputs.repository_path }}/content/summaries || true
         find . -type f -name '*.tsv' -exec cp --parents {} ${{ inputs.repository_path }}/content/summaries/  \;
         
-        cp ./archive_totals.json ${{ inputs.repository_content_path }}/content
+        cp ./archive_totals.json ${{ inputs.repository_path }}/content
         cp ./totals.json ${{ inputs.repository_path }}/content
         cp \
           ${{ inputs.extraction_cache_path }}/ips/region_codes_to_coordinates.yaml \
