@@ -1,6 +1,6 @@
-name: Check self-hosted runner
+name: Run `s3logextraction` command
 description: |
-  Used to immediately cancel workflow if self-hosted runner isn't online.
+  Run the `s3logextraction` command within a specified conda environment.
   Requires multiple environment variables to be set, including `CONDA_BASE_PATH` and `CONDA_ENV_NAME`.
   Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` and other API keys.
   
