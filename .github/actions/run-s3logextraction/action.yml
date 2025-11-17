@@ -2,9 +2,9 @@ name: Check self-hosted runner
 description: Used to immediately cancel workflow if self-hosted runner isn't online.
 
 inputs:
-  conda_base_path:
-    description: Base path to conda installation.
-    required: true
+#  conda_base_path:
+#    description: Base path to conda installation.
+#    required: true
   conda_env_name:
     description: Name of conda environment to activate.
     required: true
@@ -24,5 +24,7 @@ runs:
     - shell: bash
       name: Activate conda environment and run command
       run: |
-        source ${{ inputs.conda_base_path }}/bin/activate ${{ inputs.conda_env_name }}
+        echo conda_base_path
+        echo $conda_base_path
+#        source ${{ inputs.conda_base_path }}/bin/activate ${{ inputs.conda_env_name }}
         s3logextraction ${{ inputs.command }} ${{ inputs.flags }}

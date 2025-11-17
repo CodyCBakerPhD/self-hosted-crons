@@ -34,9 +34,11 @@ jobs:
     runs-on: [self-hosted, typhon, ember]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: ./.github/actions/run-s3logextraction
+      - name: Run EMBER S3 log extraction
+        uses: ./.github/actions/run-s3logextraction
         with:
           conda_base_path: ${{ env.conda_base_path }}
           conda_env_name: ${{ env.conda_env_name }}

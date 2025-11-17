@@ -1,0 +1,138 @@
+name: Deploy DANDI access logs (Typhon CRON)
+
+on:
+  schedule:
+    - cron: "0 10 * * *"  # ~6am ET
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  conda_base_path: "/data/dandi/s3-logs/conda"
+  conda_env_name: "s3_logs_cron"
+
+jobs:
+  CheckTyphon:
+    name: Pre-run Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cancel if offline
+        uses: ./.github/actions/check-runner
+        with:
+          org: CodyCBakerPhD/self-hosted-crons
+          labels: typhon,dandi
+          token: ${{ secrets._GITHUB_API_KEY }}
+
+  ProcessDandiAccessLogs:
+    needs: CheckTyphon
+    name: Process DANDI access logs
+    runs-on: [self-hosted, typhon, dandi]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run DANDI S3 log extraction
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          #conda_base_path: ${{ env.conda_base_path }}
+          conda_env_name: ${{ env.conda_env_name }}
+          command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
+          flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
+        env:
+          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+
+      - name: Update IP indexes
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          conda_base_path: ${{ env.conda_base_path }}
+          conda_env_name: ${{ env.conda_env_name }}
+          command: update ip indexes
+        env:
+          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+
+      - name: Update IP regions
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          conda_base_path: ${{ env.conda_base_path }}
+          conda_env_name: ${{ env.conda_env_name }}
+          command: update ip regions
+        env:
+          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+          IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+
+      - name: Update region coordinates
+        uses: ./.github/actions/run-s3logextraction
+        with:
+          conda_base_path: ${{ env.conda_base_path }}
+          conda_env_name: ${{ env.conda_env_name }}
+          command: update ip coordinates
+        env:
+          OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+          IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+
+#  UpdateIpIndexes:
+#    uses: ./.github/workflows/update-ip-indexes.yml
+#    needs: UpdateExtraction
+#    secrets:
+#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+#
+#  UpdateIpRegions:
+#    uses: ./.github/workflows/update-ip-regions.yml
+#    needs: UpdateIpIndexes
+#    secrets:
+#      S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+#      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+
+#  UpdateRegionCoordinates:
+#    uses: ./.github/workflows/update-region-coordinates.yml
+#    needs: UpdateIpRegions
+#    secrets:
+#      OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+#      IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+
+#  GenerateDandisetSummaries:
+#    uses: ./.github/workflows/generate-dandiset-summaries.yml
+#    needs: UpdateRegionCoordinates
+#
+#  GenerateArchiveSummaries:
+#    uses: ./.github/workflows/generate-archive-summaries.yml
+#    needs: GenerateDandisetSummaries
+#
+#  GenerateDandisetTotals:
+#    uses: ./.github/workflows/generate-dandiset-totals.yml
+#    needs: GenerateArchiveSummaries
+#
+#  GenerateArchiveTotals:
+#    uses: ./.github/workflows/generate-archive-totals.yml
+#    needs: GenerateDandisetTotals
+
+#  UploadContent:
+#    uses: ./.github/workflows/upload-content.yml
+#    needs: ProcessDandiAccessLogs
+#    secrets:
+#      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
+
+  NotifyOnFailure:
+    if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
+    needs: [CheckTyphon, ProcessDandiAccessLogs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email notification on failure
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "DANDI Access Log Extraction Update Failed (Typhon CRON)"
+          to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
+          from: Typhon CRON
+          body: |
+            The scheduled run of S3 log extraction updates encountered an issue, please check status at
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/dandi-access-logs-typhon-cron.yml
