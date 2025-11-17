@@ -10,8 +10,11 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  conda_base_path: "/data/dandi/s3-logs/conda"
-  conda_env_name: "s3_logs_cron"
+  CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
+  CONDA_ENV_NAME: "s3_logs_cron"
+  S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+  IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
+  OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
 
 jobs:
   CheckTyphon:
@@ -40,41 +43,23 @@ jobs:
       - name: Run DANDI S3 log extraction
         uses: ./.github/actions/run-s3logextraction
         with:
-          #conda_base_path: ${{ env.conda_base_path }}
-          conda_env_name: ${{ env.conda_env_name }}
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
           flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
-        env:
-          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
       - name: Update IP indexes
         uses: ./.github/actions/run-s3logextraction
         with:
-          conda_base_path: ${{ env.conda_base_path }}
-          conda_env_name: ${{ env.conda_env_name }}
           command: update ip indexes
-        env:
-          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
       - name: Update IP regions
         uses: ./.github/actions/run-s3logextraction
         with:
-          conda_base_path: ${{ env.conda_base_path }}
-          conda_env_name: ${{ env.conda_env_name }}
           command: update ip regions
-        env:
-          S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-          IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
 
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction
         with:
-          conda_base_path: ${{ env.conda_base_path }}
-          conda_env_name: ${{ env.conda_env_name }}
           command: update ip coordinates
-        env:
-          OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
-          IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
 
 #  UpdateIpIndexes:
 #    uses: ./.github/workflows/update-ip-indexes.yml
