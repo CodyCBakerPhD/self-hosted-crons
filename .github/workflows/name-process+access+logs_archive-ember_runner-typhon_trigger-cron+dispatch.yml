@@ -85,15 +85,15 @@ jobs:
           command: update totals
           flags: --mode archive
 
-  UploadContent:
-    uses: ./.github/workflows/upload-content.yml
-    needs: ProcessAccessLogs
-    secrets:
-      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
+#  UploadContent:
+#    uses: ./.github/workflows/upload-content.yml
+#    needs: ProcessAccessLogs
+#    secrets:
+#      _GITHUB_API_KEY: ${{ secrets._GITHUB_API_KEY }}
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckTyphon, UploadContent]
+    needs: [CheckTyphon, ProcessAccessLogs]
     runs-on: ubuntu-latest
     steps:
       - name: Send email notification on failure
