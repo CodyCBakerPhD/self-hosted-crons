@@ -2,7 +2,7 @@
 name: Generate DANDI microscopy summaries
 on:
   schedule:
-    - cron: "0 6 * * 1"  # 2am EST every Monday
+    - cron: "0 3 * * 1"  # 11pm every Sunday (ET)
   workflow_dispatch:
 
 env:
