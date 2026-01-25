@@ -2,7 +2,7 @@ name: Update DANDI IP cache (Typhon CRON)
 
 on:
   schedule:
-    - cron: "0 16 * * *"  # ~6am ET
+    - cron: "0 16/8 * * *"  # ~6am ET
   workflow_dispatch:
 
 concurrency:
@@ -43,7 +43,7 @@ jobs:
       - name: Update IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
-          command: update ip regions --batch-limit 4
+          command: update ip regions --limit 100
 
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction-command

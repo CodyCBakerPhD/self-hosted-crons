@@ -42,7 +42,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
-          flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
+          flags: --mode remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
           entrypoint: 'dandis3logextraction'
 
   NotifyOnFailure:
