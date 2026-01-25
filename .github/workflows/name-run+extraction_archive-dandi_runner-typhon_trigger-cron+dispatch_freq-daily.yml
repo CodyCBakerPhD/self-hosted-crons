@@ -45,12 +45,6 @@ jobs:
           flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
           entrypoint: 'dandis3logextraction'
 
-      - name: Upload summaries
-        uses: ./.github/actions/upload-summaries
-        with:
-          extraction_cache_path: /data/dandi/s3-logs/extraction_cache
-          repository_path: /data/dandi/s3-logs/access-summaries
-
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckTyphon, ProcessAccessLogs]
