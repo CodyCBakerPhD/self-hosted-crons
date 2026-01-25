@@ -13,8 +13,6 @@ env:
   CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
   CONDA_ENV_NAME: "s3_logs_cron"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-  OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
 
 jobs:
   CheckTyphon:
