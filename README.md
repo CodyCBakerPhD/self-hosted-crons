@@ -11,10 +11,3 @@ tmux new -scodys_self_hosted_runner
 cd /mnt/backup/dandi/dandiarchive-logs-cody/self_hosted_runner/actions-runner
 ./run.cmd
 ```
-
-Which should trigger on restart via:
-
-```bash
-crontab -e
-> @reboot  /home/user/startup.sh
-``
