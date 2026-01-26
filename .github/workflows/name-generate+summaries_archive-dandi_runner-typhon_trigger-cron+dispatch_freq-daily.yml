@@ -2,7 +2,7 @@ name: Update DANDI access summaries (Typhon CRON)
 
 on:
   schedule:
-    - cron: "0 16 * * *"  # ~12pm ET
+    - cron: "0 7 * * *"
   workflow_dispatch:
 
 concurrency:
