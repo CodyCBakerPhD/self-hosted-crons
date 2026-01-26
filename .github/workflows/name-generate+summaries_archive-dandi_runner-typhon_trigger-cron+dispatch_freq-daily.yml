@@ -41,7 +41,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode dandi --skip 000108
+          flags: --skip 000108
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive summaries
@@ -55,7 +55,6 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --mode dandi
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive totals

@@ -42,14 +42,13 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
-          flags: --mode dandi-remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json
+          flags: --mode remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 100000
           entrypoint: 'dandis3logextraction'
 
-      - name: Upload summaries
-        uses: ./.github/actions/upload-summaries
+      - name: Update IP indexes
+        uses: ./.github/actions/run-s3logextraction-command
         with:
-          extraction_cache_path: /data/dandi/s3-logs/extraction_cache
-          repository_path: /data/dandi/s3-logs/access-summaries
+          command: update ip indexes
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
