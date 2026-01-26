@@ -4,10 +4,10 @@ GitHub Action-controlled CRON jobs to run on a self-hosted runner on remote serv
 
 Follow the instructions from settings for establishing self-hosted runner.
 
-A startup script at `~/startup.sh`:
+To restart job runner after system reboot:
 
 ```bash
 tmux new -scodys_self_hosted_runner
-cd /mnt/backup/dandi/dandiarchive-logs-cody/self_hosted_runner/actions-runner
+cd /data/dandi/s3-logs/self_hosted_runner/actions-runner
 ./run.cmd
 ```
