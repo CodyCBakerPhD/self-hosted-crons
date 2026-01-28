@@ -31,9 +31,9 @@ jobs:
           labels: typhon,dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  ProcessAccessLogs:
+  UpdateIPCaches:
     needs: CheckTyphon
-    name: Process access logs
+    name: Update IP caches
     runs-on: [self-hosted, typhon, dandi]
 
     steps:
@@ -43,7 +43,7 @@ jobs:
       - name: Update IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
-          command: update ip regions --batch-limit 100
+          command: update ip regions --batch-limit 3
 
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction-command
