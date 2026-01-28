@@ -52,7 +52,7 @@ jobs:
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckTyphon, ProcessAccessLogs]
+    needs: [CheckTyphon, UpdateIPCaches]
     runs-on: ubuntu-latest
     steps:
       - name: Send email notification on failure
