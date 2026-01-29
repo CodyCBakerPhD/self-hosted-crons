@@ -43,7 +43,7 @@ jobs:
       - name: Update IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
-          command: update ip regions --batch-limit 3
+          command: update ip regions --batch-limit 1
 
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction-command
