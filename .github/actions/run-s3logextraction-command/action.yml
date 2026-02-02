@@ -20,6 +20,12 @@ inputs:
     description: The CLI entrypoint to use. Defaults to `s3logextraction`.
     required: false
     default: "s3logextraction"
+  flock_file:
+    description: |
+      Path to a file to use for flocking.
+      Defaults to `/data/dandi/s3-logs/flocks/s3logextraction.lock`.
+    required: false
+    default: "/data/dandi/s3-logs/flocks/s3logextraction.lock"
 
 runs:
   using: "composite"
@@ -28,4 +34,4 @@ runs:
       name: Activate conda environment and run command
       run: |
         source ${{ env.CONDA_BASE_PATH }}/bin/activate ${{ env.CONDA_ENV_NAME }}
-        ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
+        flock -n ${{ inputs.flock_file }} ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
