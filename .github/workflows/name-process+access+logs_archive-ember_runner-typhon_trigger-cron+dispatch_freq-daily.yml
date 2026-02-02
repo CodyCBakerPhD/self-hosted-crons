@@ -45,45 +45,53 @@ jobs:
         with:
           command: extract s3://ember-open-data-logs/650477180493/us-east-1/ember-open-data
           flags: --mode dandi-remote --manifest /data/ember/s3-logs/extraction_cache/manifest_parsed.json
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Update IP indexes
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip indexes
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Update IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip regions
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip coordinates
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Generate Dandiset summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
           flags: --mode dandi --api-url https://api-dandi.emberarchive.org/api
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
           flags: --mode archive
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Generate Dandiset totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
           flags: --mode dandi
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Generate archive totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
           flags: --mode archive
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Upload summaries
         uses: ./.github/actions/upload-summaries
