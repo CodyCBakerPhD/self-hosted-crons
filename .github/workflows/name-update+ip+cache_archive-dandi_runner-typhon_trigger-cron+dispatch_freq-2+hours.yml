@@ -2,7 +2,7 @@ name: Update DANDI IP cache
 
 on:
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 2/2 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -67,4 +67,4 @@ jobs:
           from: Typhon CRON
           body: |
             A scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-update+ip+cache_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-daily.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-update+ip+cache_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-2+hours.yml
