@@ -1,8 +1,8 @@
-name: Update DANDI access summaries (Typhon CRON)
+name: Update DANDI summaries
 
 on:
   schedule:
-    - cron: "0 7 * * *"
+    - cron: "0 2 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -87,4 +87,4 @@ jobs:
           from: Typhon CRON
           body: |
             The scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-generate+summaries_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-daily.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-update+summaries_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-daily.yml
