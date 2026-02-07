@@ -1,4 +1,4 @@
-name: Deploy EMBER access logs (Typhon CRON)
+name: Process EMBER logs
 
 on:
   schedule:
@@ -116,4 +116,4 @@ jobs:
           from: Typhon CRON
           body: |
             The scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-process+access+logs_archive-ember_runner-typhon_trigger-cron+dispatch_freq-daily.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-process+logs_archive-ember_runner-typhon_trigger-cron+dispatch_freq-daily.yml
