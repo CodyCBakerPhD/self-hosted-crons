@@ -2,6 +2,17 @@ name: Run AIND Ephys
 
 on:
   workflow_dispatch:
+    inputs:
+      content_id:
+        description: 'DANDI content ID (blob or zarr)'
+        required: true
+        type: string
+      extra_args:
+        content_id:
+          description: 'Additional args to pass to dandicompute'
+          required: false
+          default: ''
+          type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -33,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        run: dandicompute aind prepare --id baec93f8-8ba7-4d37-bc39-dd322d192bd0 --submit
+        run: dandicompute aind prepare --id ${{ github.event.inputs.content_id }} ${{ github.event.inputs.extra_args }} --submit
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
