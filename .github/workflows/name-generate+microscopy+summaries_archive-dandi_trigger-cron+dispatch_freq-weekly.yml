@@ -1,16 +1,13 @@
 # Separate action for the gargantuan dataset of DANDI:000108
-name: Generate DANDI microscopy summaries
+name: Update microscopy summaries
 on:
   schedule:
-    - cron: "0 2 * * 1"
+    - cron: "0 5 * * 1"
   workflow_dispatch:
 
 env:
   CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
   CONDA_ENV_NAME: "s3_logs_cron"
-  S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-  OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
 
 jobs:
 
@@ -28,17 +25,20 @@ jobs:
           labels: typhon,dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  ProcessAccessLogs:
+  UpdateMicroscopySummaries:
     needs: CheckTyphon
-    name: Process access logs
+    name: Update microscopy summaries
     runs-on: [self-hosted, typhon, dandi]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: "Generate DANDI:000108 summaries"
+      - name: Update microscopy summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode dandi --pick 000108
+          flags: --pick 000108
+          entrypoint: 'dandis3logextraction'
+
+# Wait for the other summary updater to aggregate further
