@@ -2,7 +2,7 @@ name: Monitor DANDI Compute
 
 on:
   schedule:
-    - cron: "0 0/12 * * *"
+    - cron: "5 0/1 * * *"
   workflow_dispatch:
 
 concurrency:
