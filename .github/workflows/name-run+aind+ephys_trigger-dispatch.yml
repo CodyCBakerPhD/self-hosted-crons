@@ -8,11 +8,10 @@ on:
         required: true
         type: string
       extra_args:
-        content_id:
-          description: 'Additional args to pass to dandicompute'
-          required: false
-          default: ''
-          type: string
+        description: 'Additional args to pass to dandicompute'
+        required: false
+        default: ''
+        type: string
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
