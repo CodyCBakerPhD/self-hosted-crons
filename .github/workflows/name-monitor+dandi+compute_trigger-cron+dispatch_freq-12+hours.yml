@@ -35,7 +35,7 @@ jobs:
           while true; do
             squeue --format="%.10i %15P %40j %10u %.2t %.10M %.6D %.2C     %30R" --me
             echo -e '\n\n\n\n\n'
-            sleep 30
+            sleep 300
           done
   
   NotifyOnFailure:
