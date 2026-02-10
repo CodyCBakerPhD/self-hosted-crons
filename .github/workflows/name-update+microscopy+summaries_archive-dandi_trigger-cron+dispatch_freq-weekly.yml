@@ -38,7 +38,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --pick 000108
+          flags: --pick 000108 --workers 1
           entrypoint: 'dandis3logextraction'
 
 # Wait for the other summary updater to aggregate further
