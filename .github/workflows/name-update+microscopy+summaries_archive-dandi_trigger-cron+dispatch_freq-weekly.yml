@@ -42,3 +42,22 @@ jobs:
           entrypoint: 'dandis3logextraction'
 
 # Wait for the other summary updater to aggregate further
+
+  NotifyOnFailure:
+    if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
+    needs: [CheckTyphon, UpdateMicroscopySummaries]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send email notification on failure
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "DANDI microscopy summary update failed (Typhon CRON)"
+          to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
+          from: Typhon CRON
+          body: |
+            The scheduled run of S3 log extraction updates encountered an issue, please check status at
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-update+microscopy+summaries_archive-dandi_trigger-cron+dispatch_freq-weekly.yml
