@@ -37,6 +37,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Update IP indexes
+        uses: ./.github/actions/run-s3logextraction-command
+        with:
+          command: update ip indexes
+
       - name: Generate Dandiset summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:

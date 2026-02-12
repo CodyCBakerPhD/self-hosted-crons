@@ -45,11 +45,6 @@ jobs:
           flags: --mode remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 100000
           entrypoint: 'dandis3logextraction'
 
-      - name: Update IP indexes
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update ip indexes
-
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckTyphon, ProcessAccessLogs]
