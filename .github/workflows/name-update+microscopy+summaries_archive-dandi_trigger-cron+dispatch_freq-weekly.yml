@@ -29,6 +29,7 @@ jobs:
     needs: CheckTyphon
     name: Update microscopy summaries
     runs-on: [self-hosted, typhon, dandi]
+    timeout-minutes: 1600
 
     steps:
       - name: Checkout repository
