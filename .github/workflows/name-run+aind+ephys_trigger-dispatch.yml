@@ -39,7 +39,7 @@ jobs:
   RunAINDEphys:
     needs: CheckEngaging
     name: Run AIND Ephys
-    runs-on: [self-hosted, mit, engaging]
+    runs-on: [self-hosted, mit, engaging, compute]
 
     steps:
       - name: Checkout repository
