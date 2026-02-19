@@ -44,9 +44,9 @@ jobs:
     steps:
       - name: Checkout repository
         run: |
-          source /etc/profile.d/modules.sh
           module load miniforge
           conda activate /orcd/data/dandi/001/environments/name-dandi+compute_env
+          pip list
           dandicompute aind prepare --id ${{ github.event.inputs.content_id }} ${{ github.event.inputs.extra_args}} --submit
 
   NotifyOnFailure:
