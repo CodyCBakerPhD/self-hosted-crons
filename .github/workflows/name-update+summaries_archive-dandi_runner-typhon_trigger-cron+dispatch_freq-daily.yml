@@ -33,7 +33,7 @@ jobs:
     needs: CheckTyphon
     name: Update DANDI summaries
     runs-on: [self-hosted, typhon, dandi]
-    timeout-minutes: 1600
+    timeout-minutes: 2880  # 48 hours
 
     steps:
       - name: Checkout repository
