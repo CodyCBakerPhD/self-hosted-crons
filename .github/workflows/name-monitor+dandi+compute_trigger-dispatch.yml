@@ -26,6 +26,7 @@ jobs:
     needs: CheckEngaging
     name: Monitor DANDI Compute
     runs-on: [self-hosted, mit, engaging, monitor]
+    timeout-minutes: 2880  # 2 days, same as mit_preemtable
 
     steps:
       - name: Checkout repository
