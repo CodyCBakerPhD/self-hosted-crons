@@ -51,13 +51,6 @@ jobs:
           flags: --skip 000108
           entrypoint: 'dandis3logextraction'
 
-      - name: Generate unassociated summaries
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update summaries
-          flags: --skip 000108 --unassociated
-          entrypoint: 'dandis3logextraction'
-
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
