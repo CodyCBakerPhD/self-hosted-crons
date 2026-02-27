@@ -44,46 +44,12 @@ jobs:
         with:
           command: update ip indexes
 
-      # Run normal summaries anyway since fast enough
-      - name: Generate Dandiset summaries
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update summaries
-          flags: --skip 000108
-          entrypoint: 'dandis3logextraction'
-
       - name: Generate unassociated summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --skip 000108 --unassociated
+          flags: --unassociated
           entrypoint: 'dandis3logextraction'
-
-      - name: Generate archive summaries
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update summaries
-          flags: --mode archive
-          entrypoint: 'dandis3logextraction'
-
-      - name: Generate Dandiset totals
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update totals
-          entrypoint: 'dandis3logextraction'
-
-      - name: Generate archive totals
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update totals
-          flags: --mode archive
-          entrypoint: 'dandis3logextraction'
-
-      - name: Upload summaries
-        uses: ./.github/actions/upload-summaries
-        with:
-          extraction_cache_path: /data/dandi/s3-logs/extraction_cache
-          repository_path: /data/dandi/s3-logs/access-summaries
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
