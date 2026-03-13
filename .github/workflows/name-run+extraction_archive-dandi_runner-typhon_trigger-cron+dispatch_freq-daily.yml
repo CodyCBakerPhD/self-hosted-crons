@@ -33,6 +33,7 @@ jobs:
     needs: CheckTyphon
     name: Process access logs
     runs-on: [self-hosted, typhon, dandi]
+    timeout-minutes: 2880  # 48 hours
 
     steps:
       - name: Checkout repository
@@ -42,7 +43,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
-          flags: --mode remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 100000
+          flags: --mode remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 500000
           entrypoint: 'dandis3logextraction'
 
   NotifyOnFailure:
