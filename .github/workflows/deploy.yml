@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  pull_request:
+    types: [synchronize, opened, reopened, ready_for_review]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  pre-commit:
+    uses: ./.github/workflows/pre-commit.yml
+    permissions:
+      contents: write
+    secrets:
+      API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
