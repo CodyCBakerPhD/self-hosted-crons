@@ -15,4 +15,4 @@ jobs:
     permissions:
       contents: write
     secrets:
-      API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      API_TOKEN_GITHUB: ${{ secrets._API_TOKEN_GITHUB }}
