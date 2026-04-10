@@ -4,7 +4,7 @@ on:
     secrets:
       _API_TOKEN_GITHUB:
         description: 'GitHub Token for pushing back automatic changes'
-        required: true
+        required: false
 
 jobs:
 
@@ -19,9 +19,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets._API_TOKEN_GITHUB }}  # Requires a custom token to re-trigger from pre-commit
+        token: ${{ secrets._API_TOKEN_GITHUB || github.token }}  # Requires a custom token to re-trigger from pre-commit
         ref: ${{ github.head_ref }}
-        persist-credentials: false  # otherwise, the token used is the GITHUB_TOKEN
+        persist-credentials: false  # prevents the token from being reused in subsequent steps
         fetch-depth: 0  # otherwise, there would be errors pushing refs to the destination repository
     - name: Setup Python
       uses: actions/setup-python@v5
@@ -68,7 +68,7 @@ jobs:
     - name: Push changes
       uses: ad-m/github-push-action@v0.8.0
       with:
-        github_token: ${{ secrets._API_TOKEN_GITHUB }}
+        github_token: ${{ secrets._API_TOKEN_GITHUB || github.token }}
         branch: ${{ github.ref }}
 
     - name: Send fail signal if changes were detected
