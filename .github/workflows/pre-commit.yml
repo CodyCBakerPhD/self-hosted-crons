@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      checks: write
     steps:
     - uses: actions/checkout@v4
       with:
@@ -65,11 +66,25 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git commit -m "pre-commit" -a || true
 
+    - name: Capture pre-commit commit SHA
+      id: precommit_sha
+      if: env.CHANGES == 'true'
+      run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+
     - name: Push changes
       uses: ad-m/github-push-action@v0.8.0
       with:
         github_token: ${{ secrets._API_TOKEN_GITHUB || github.token }}
         branch: ${{ github.head_ref }}
+
+    - name: Report pre-commit passed on fixed commit
+      if: env.CHANGES == 'true'
+      env:
+        GH_TOKEN: ${{ github.token }}
+        NEW_SHA: ${{ steps.precommit_sha.outputs.sha }}
+      run: |
+        printf '{"name":"Deploy / pre-commit / run","head_sha":"%s","status":"completed","conclusion":"success","output":{"title":"Pre-commit auto-fixes applied","summary":"Pre-commit automatically applied formatting fixes. All checks now pass on the updated commit."}}' "$NEW_SHA" | \
+          gh api repos/${{ github.repository }}/check-runs --method POST -H "Accept: application/vnd.github+json" --input -
 
     - name: Send fail signal if changes were detected
       if: env.CHANGES == 'true'

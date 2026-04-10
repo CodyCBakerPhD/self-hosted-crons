@@ -14,4 +14,5 @@ jobs:
     uses: ./.github/workflows/pre-commit.yml
     permissions:
       contents: write
+      checks: write
     secrets: inherit
