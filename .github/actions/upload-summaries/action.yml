@@ -3,7 +3,7 @@ description: |
   Upload the final access log summaries to an already-cloned GitHub repo.
   Requires multiple environment variables to be set, including `CONDA_BASE_PATH` and `CONDA_ENV_NAME`.
   Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` and other API keys.
-  
+
 
 inputs:
   extraction_cache_path:
@@ -20,21 +20,21 @@ runs:
       name: Activate conda environment (containing local git config) and run commands
       run: |
         source ${{ env.CONDA_BASE_PATH }}/bin/activate ${{ env.CONDA_ENV_NAME }}
-        
-        cd ${{ inputs.extraction_cache_path }}/summaries 
-        
+
+        cd ${{ inputs.extraction_cache_path }}/summaries
+
         mkdir ${{ inputs.repository_path }}/content || true
         mkdir ${{ inputs.repository_path }}/content/summaries || true
         find . -type f -name '*.tsv' -exec cp --parents {} ${{ inputs.repository_path }}/content/summaries/  \;
-        
+
         cp ./archive_totals.json ${{ inputs.repository_path }}/content
         cp ./totals.json ${{ inputs.repository_path }}/content
         cp \
           ${{ inputs.extraction_cache_path }}/ips/region_codes_to_coordinates.yaml \
           ${{ inputs.repository_path }}/content/region_codes_to_coordinates.yaml
-        
+
         cd ${{ inputs.repository_path }}
-        
+
         git pull
         git branch
         git status

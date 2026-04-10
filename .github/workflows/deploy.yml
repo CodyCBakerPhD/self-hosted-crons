@@ -14,5 +14,5 @@ jobs:
     uses: ./.github/workflows/pre-commit.yml
     permissions:
       contents: write
-    secrets:
-      _API_TOKEN_GITHUB: ${{ secrets._API_TOKEN_GITHUB }}
+      checks: write
+    secrets: inherit

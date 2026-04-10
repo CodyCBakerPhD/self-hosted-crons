@@ -4,12 +4,12 @@ description: |
   Requires multiple environment variables to be set, including `CONDA_BASE_PATH` and `CONDA_ENV_NAME`.
   Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` and other API keys.
   Can override the `entrypoint` to use plugins such as `dandis3logextraction`.
-  
+
 
 inputs:
   command:
     description: |
-      `s3logextraction` command to run after activating conda environment. 
+      `s3logextraction` command to run after activating conda environment.
       Use spaces to separate command groups.
     required: true
   flags:
