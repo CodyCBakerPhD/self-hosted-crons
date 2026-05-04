@@ -11,7 +11,7 @@ concurrency:
 
 env:
   CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
-  CONDA_ENV_NAME: "s3_logs_cron"
+  CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
 jobs:
@@ -43,8 +43,14 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
-          flags: --mode remote --manifest /data/dandi/s3-logs/extraction_cache/manifest_parsed.json --limit 500000
+          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 50000
           entrypoint: 'dandis3logextraction'
+
+      - name: Commit changes under version-tracked cache
+        working-directory: /data/dandi/s3-logs/extraction_cache
+        run: |
+          git add .
+          git commit --message "Update extraction cache" || true  # || true in case of no changes
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
