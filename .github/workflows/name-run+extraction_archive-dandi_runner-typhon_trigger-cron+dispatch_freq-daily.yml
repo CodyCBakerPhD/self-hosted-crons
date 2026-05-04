@@ -13,7 +13,7 @@ env:
   CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  DUCT_OUTPUT_PREFIX: "/data/dandi/s3-logs/extraction_cache_{datetime}"
+  DUCT_OUTPUT_PREFIX: "/data/dandi/s3-logs/extraction_cache/.duct/{datetime}"
 
 jobs:
   CheckTyphon:
