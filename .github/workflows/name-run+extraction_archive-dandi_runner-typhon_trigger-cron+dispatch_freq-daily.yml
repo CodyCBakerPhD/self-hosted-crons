@@ -48,9 +48,9 @@ jobs:
 
       - name: Commit changes under version-tracked cache
         working-directory: /data/dandi/s3-logs/extraction_cache
-        run: 
+        run: |
           git add .
-          git commit --message || true  # || true in case of no changes
+          git commit --message "Update extraction cache" || true  # || true in case of no changes
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
