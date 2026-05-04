@@ -43,7 +43,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
-          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 500000
+          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 50000
           entrypoint: 'dandis3logextraction'
 
       - name: Commit changes under version-tracked cache
