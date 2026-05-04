@@ -48,33 +48,34 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --skip 000108
+          flags: --skip 000108 --directory /data/dandi/s3-logs/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode archive
+          flags: --mode archive --directory /data/dandi/s3-logs/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Generate Dandiset totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
+          flags: --directory /data/dandi/s3-logs/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --mode archive
+          flags: --mode archive --directory /data/dandi/s3-logs/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Upload summaries
         uses: ./.github/actions/upload-summaries
         with:
-          extraction_cache_path: /data/dandi/s3-logs/extraction_cache
+          extraction_cache_path: /data/dandi/s3-logs/extraction_summaries
           repository_path: /data/dandi/s3-logs/access-summaries
 
   NotifyOnFailure:
