@@ -32,6 +32,7 @@ runs:
   steps:
     - shell: bash
       name: Activate conda environment and run command
+      working-directory: /data/dandi/s3-logs/extraction_cache/
       run: |
         source ${{ env.CONDA_BASE_PATH }}/bin/activate ${{ env.CONDA_ENV_NAME }}
         flock -n ${{ inputs.flock_file }} duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
