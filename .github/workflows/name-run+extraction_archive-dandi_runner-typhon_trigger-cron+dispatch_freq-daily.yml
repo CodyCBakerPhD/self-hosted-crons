@@ -46,6 +46,12 @@ jobs:
           flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 500000
           entrypoint: 'dandis3logextraction'
 
+      - name: Commit changes under version-tracked cache
+        working-directory: /data/dandi/s3-logs/extraction_cache
+        run: 
+          git add .
+          git commit --message || true  # || true in case of no changes
+
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
     needs: [CheckTyphon, ProcessAccessLogs]
