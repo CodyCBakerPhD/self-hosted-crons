@@ -49,8 +49,6 @@ jobs:
       - name: Commit changes under version-tracked cache
         working-directory: /data/dandi/s3-logs/extraction_cache
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
           git add .
           git commit --message "Update extraction cache" || true  # || true in case of no changes
 
