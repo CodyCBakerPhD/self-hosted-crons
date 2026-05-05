@@ -48,7 +48,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --unassociated
+          flags: --unassociated --directory /data/dandi/s3-logs/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
   NotifyOnFailure:
