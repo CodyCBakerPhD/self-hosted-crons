@@ -47,11 +47,9 @@ jobs:
           flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 150000
           entrypoint: 'dandis3logextraction'
 
-      - name: Commit changes under version-tracked cache
-        working-directory: /data/dandi/s3-logs/extraction_cache
-        run: |
-          git add .
-          git commit --message "Update extraction cache" || true  # || true in case of no changes
+      - name: Take snapshot of changes (more efficient than Git tracking; doesn't need `sudo`)
+        working-directory: /data/dandi/s3-logs
+        run: ./snapshots/restic backup ./extraction_cache --repo ./snapshots/backups/ --password-file ./snapshots/.restic-password --read-concurrency 16 --pack-size 128 --compression max
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
