@@ -75,7 +75,7 @@ jobs:
       - name: Upload summaries
         uses: ./.github/actions/upload-summaries
         with:
-          extraction_cache_path: /data/dandi/s3-logs/extraction_summaries
+          extraction_cache_path: /data/dandi/s3-logs/extraction_cache_old # /data/dandi/s3-logs/extraction_summaries
           repository_path: /data/dandi/s3-logs/access-summaries
 
   NotifyOnFailure:
