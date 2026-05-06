@@ -2,7 +2,7 @@ name: Run DANDI log extraction
 
 on:
   schedule:
-    - cron: "0 * * * *"
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 concurrency:
@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs/769362853226/us-east-2/dandiarchive
-          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 150000
+          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 1000000
           entrypoint: 'dandis3logextraction'
 
       - name: Take snapshot of changes (more efficient than Git tracking; doesn't need `sudo`)
