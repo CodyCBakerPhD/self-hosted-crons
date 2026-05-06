@@ -49,7 +49,7 @@ jobs:
 
       - name: Take snapshot of changes (more efficient than Git tracking; doesn't need `sudo`)
         working-directory: /data/dandi/s3-logs
-        run: ./snapshots/restic backup ./extraction_cache --repo ./snapshots/backups/ --password-file ./snapshots/.restic-password --read-concurrency 16 --pack-size 128 --compression max
+        run: ./snapshots/restic backup ./extraction_cache --repo ./snapshots/backups/ --password-file ./snapshots/.restic-password --read-concurrency 16 --pack-size 128 --compression max --skip-if-unchanged
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
