@@ -32,7 +32,9 @@ jobs:
     steps:
       - name: Update log inventory
         working-directory: /data/dandi/s3-logs/inventory
-        run: s5cmd sync --size-only 's3://dandiarchive-inventory/dandiarchive-logs/LogsWeeklyInventory/*' .
+        run: |
+          source ../conda/bin/activate name-s3+logs+processing_py-3+13_env
+          s5cmd sync --size-only 's3://dandiarchive-inventory/dandiarchive-logs/LogsWeeklyInventory/*' .
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
