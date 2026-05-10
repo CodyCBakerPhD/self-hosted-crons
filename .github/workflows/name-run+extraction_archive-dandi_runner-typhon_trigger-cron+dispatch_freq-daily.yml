@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs
-          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 1000000
+          flags: --mode remote --inventory /data/dandi/s3-logs/inventory --limit 1500000
           entrypoint: 'dandis3logextraction'
 
       - name: Take snapshot of changes (more efficient than Git tracking; doesn't need `sudo`)
