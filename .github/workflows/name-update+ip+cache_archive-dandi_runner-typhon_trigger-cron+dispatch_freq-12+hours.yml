@@ -10,7 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
+  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
   IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
