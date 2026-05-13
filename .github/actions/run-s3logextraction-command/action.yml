@@ -23,9 +23,9 @@ inputs:
   flock_file:
     description: |
       Path to a file to use for flocking.
-      Defaults to `/data/dandi/s3-logs/flocks/s3logextraction.lock`.
+      Defaults to `/mnt/s3-logs/dandi-s3-logs/flocks/s3logextraction.lock`.
     required: false
-    default: "/data/dandi/s3-logs/flocks/s3logextraction.lock"
+    default: "/mnt/s3-logs/dandi-s3-logs/flocks/s3logextraction.lock"
 
 runs:
   using: "composite"
