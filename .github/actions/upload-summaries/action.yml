@@ -18,10 +18,9 @@ runs:
   steps:
     - shell: bash
       name: Activate conda environment (containing local git config) and run commands
+      working-directory: ${{ inputs.extraction_cache_path }}/summaries/
       run: |
         source ${{ env.CONDA_BASE_PATH }}/bin/activate ${{ env.CONDA_ENV_NAME }}
-
-        cd ${{ inputs.extraction_cache_path }}/summaries
 
         mkdir ${{ inputs.repository_path }}/content || true
         mkdir ${{ inputs.repository_path }}/content/summaries || true
