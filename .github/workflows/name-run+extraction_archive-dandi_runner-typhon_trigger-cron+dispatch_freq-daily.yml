@@ -47,7 +47,7 @@ jobs:
           flags: --mode remote --inventory /mnt/s3-logs/dandi-s3-logs/inventory --limit 1500000
           entrypoint: 'dandis3logextraction'
 
-      - name: Take snapshot of changes (more efficient than Git tracking; doesn't need `sudo`)
+      - name: Take snapshot for backup
         working-directory: /mnt/s3-logs/dandi-s3-logs/
         run: ./snapshots/restic backup ./extraction_cache --repo ./snapshots/backups/ --password-file ./snapshots/.restic-password --read-concurrency 16 --pack-size 128 --compression max --skip-if-unchanged
 
