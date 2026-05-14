@@ -34,4 +34,4 @@ runs:
       name: Activate conda environment and run command
       run: |
         source ${{ env.ENV_PATH }}/bin/activate
-        flock -n ${{ inputs.flock_file }} duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
+        flock -n ${{ inputs.flock_file }} ${{ env.UV_PATH }} duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
