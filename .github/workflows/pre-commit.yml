@@ -72,7 +72,7 @@ jobs:
       run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Push changes
-      uses: ad-m/github-push-action@v0.8.0
+      uses: ad-m/github-push-action@v1.1.0
       with:
         github_token: ${{ secrets._API_TOKEN_GITHUB || github.token }}
         branch: ${{ github.head_ref }}
