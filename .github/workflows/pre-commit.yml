@@ -18,7 +18,7 @@ jobs:
       contents: write
       checks: write
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
       with:
         token: ${{ secrets._API_TOKEN_GITHUB || github.token }}  # Requires a custom token to re-trigger from pre-commit
         ref: ${{ github.head_ref }}
