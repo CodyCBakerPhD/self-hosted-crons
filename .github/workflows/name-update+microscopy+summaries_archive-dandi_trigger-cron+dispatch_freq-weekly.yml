@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  CONDA_BASE_PATH: "/data/dandi/s3-logs/conda"
+  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
@@ -45,7 +45,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --pick 000108 --workers 1 --directory /data/dandi/s3-logs/extraction_summaries
+          flags: --pick 000108 --workers 1 --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
 # Wait for the other summary updater to aggregate further
