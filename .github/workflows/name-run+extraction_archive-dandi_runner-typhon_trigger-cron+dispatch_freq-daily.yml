@@ -10,8 +10,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
-  CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
+  ENV_PATH: "/mnt/s3-logs/dandi-s3-logs/name-s3logs_py-314_date-51426_env/.venv"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
   DUCT_OUTPUT_PREFIX: "/mnt/s3-logs/dandi-s3-logs/extraction_cache/.duct/{datetime}"
 
