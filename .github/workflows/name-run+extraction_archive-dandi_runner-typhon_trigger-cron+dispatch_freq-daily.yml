@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs
-          flags: --mode remote --inventory /mnt/s3-logs/dandi-s3-logs/inventory --limit 1000000
+          flags: --mode remote --inventory /mnt/s3-logs/dandi-s3-logs/inventory --cache /mnt/s3-logs/dandi-s3-logs/extraction_cache --limit 1000000
           entrypoint: 'dandis3logextraction'
 
       - name: Take snapshot for backup
