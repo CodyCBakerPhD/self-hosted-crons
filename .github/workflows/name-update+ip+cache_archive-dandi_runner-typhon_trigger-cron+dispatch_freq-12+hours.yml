@@ -11,8 +11,8 @@ concurrency:
 
 env:
   S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH }}
-  ENV_PATH: ${{ format('{0}/{1}', vars.DANDI_S3_LOG_BASE_PATH, vars.S3LOGS_ENV_NAME) }}
-  UV_PATH: ${{ format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH) }}
+  ENV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/${{ vars.S3LOGS_ENV_NAME }}"
+  UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
   IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
