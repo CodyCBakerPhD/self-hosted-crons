@@ -12,7 +12,7 @@ concurrency:
 env:
   S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}
   ENV_PATH: ${{ vars.DANDI_ENV_PATH || format('{0}/name-s3logs_py-314_date-51426_env', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
-  UV_PATH: ${{ vars.DANDI_UV_PATH || format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
+  UV_PATH: ${{ env.S3_LOG_BASE_PATH }}/uv
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
   DUCT_OUTPUT_PREFIX: "${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}/extraction_cache/.duct/{datetime}"
