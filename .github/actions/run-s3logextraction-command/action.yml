@@ -21,12 +21,8 @@ inputs:
     required: false
     default: "s3logextraction"
   flock_file:
-    description: |
-      Path to a file to use for flocking.
-      Defaults to `$S3_LOG_BASE_PATH/flocks/s3logextraction.lock` when
-      `S3_LOG_BASE_PATH` is set, or `/mnt/s3-logs/dandi-s3-logs/flocks/s3logextraction.lock` otherwise.
-    required: false
-    default: ""
+    description: Path to a file to use for flocking.
+    required: true
 
 runs:
   using: "composite"
@@ -34,14 +30,5 @@ runs:
     - shell: bash
       name: Activate environment and run command
       run: |
-        FLOCK_FILE="${{ inputs.flock_file }}"
-        if [[ -z "$FLOCK_FILE" ]]; then
-          if [[ -n "${S3_LOG_BASE_PATH:-}" ]]; then
-            FLOCK_FILE="${S3_LOG_BASE_PATH}/flocks/s3logextraction.lock"
-          else
-            FLOCK_FILE="/mnt/s3-logs/dandi-s3-logs/flocks/s3logextraction.lock"
-          fi
-        fi
-
         source ${{ env.ENV_PATH }}/bin/activate
-        flock -n "$FLOCK_FILE" ${{ env.UV_PATH }} run duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
+        flock -n "${{ inputs.flock_file }}" ${{ env.UV_PATH }} run duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}

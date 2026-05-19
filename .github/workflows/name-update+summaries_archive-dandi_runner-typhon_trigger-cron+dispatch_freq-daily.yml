@@ -15,6 +15,7 @@ env:
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
   ENV_PATH: ${{ vars.DANDI_ENV_PATH || format('{0}/name-s3logs_py-314_date-51426_env', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
   UV_PATH: ${{ vars.DANDI_UV_PATH || format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
+  FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
 jobs:
@@ -46,12 +47,14 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip indexes
+          flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Generate Dandiset summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
           flags: --skip 000108 --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive summaries
@@ -59,6 +62,7 @@ jobs:
         with:
           command: update summaries
           flags: --mode archive --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Generate Dandiset totals
@@ -66,6 +70,7 @@ jobs:
         with:
           command: update totals
           flags: --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive totals
@@ -73,6 +78,7 @@ jobs:
         with:
           command: update totals
           flags: --mode archive --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Upload summaries
