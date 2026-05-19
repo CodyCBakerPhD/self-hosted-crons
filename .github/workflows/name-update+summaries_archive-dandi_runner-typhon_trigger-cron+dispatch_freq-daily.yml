@@ -13,7 +13,7 @@ env:
   S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}
   CONDA_BASE_PATH: ${{ format('{0}/conda', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
-  ENV_PATH: ${{ vars.DANDI_ENV_PATH || format('{0}/name-s3logs_py-314_date-51426_env', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
+  ENV_PATH: ${{ format('{0}/{1}', vars.DANDI_S3_LOG_BASE_PATH, vars.S3LOGS_ENV_NAME) }}
   UV_PATH: ${{ format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
