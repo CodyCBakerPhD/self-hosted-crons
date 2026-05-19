@@ -10,10 +10,11 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  ENV_PATH: "/mnt/s3-logs/dandi-s3-logs/name-s3logs_py-314_date-51426_env/"
-  UV_PATH: "/mnt/s3-logs/dandi-s3-logs/uv"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}
+  ENV_PATH: ${{ format('{0}/name-s3logs_py-314_date-51426_env', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
+  UV_PATH: ${{ format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  DUCT_OUTPUT_PREFIX: "/mnt/s3-logs/dandi-s3-logs/extraction_cache/.duct/{datetime}"
+  DUCT_OUTPUT_PREFIX: "${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}/extraction_cache/.duct/{datetime}"
 
 jobs:
   CheckTyphon:
@@ -44,11 +45,11 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs
-          flags: --mode remote --inventory /mnt/s3-logs/dandi-s3-logs/inventory --cache /mnt/s3-logs/dandi-s3-logs/extraction_cache --limit 1000000
+          flags: --mode remote --inventory ${{ env.S3_LOG_BASE_PATH }}/inventory --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --limit 1000000
           entrypoint: 'dandis3logextraction'
 
       - name: Take snapshot for backup
-        working-directory: /mnt/s3-logs/dandi-s3-logs/
+        working-directory: ${{ env.S3_LOG_BASE_PATH }}/
         run: ./snapshots/restic backup ./extraction_cache --repo ./snapshots/backups/ --password-file ./snapshots/.restic-password --read-concurrency 16 --pack-size 128 --compression max --skip-if-unchanged
 
   NotifyOnFailure:

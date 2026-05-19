@@ -10,8 +10,11 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}
+  CONDA_BASE_PATH: ${{ format('{0}/conda', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
+  ENV_PATH: ${{ format('{0}/name-s3logs_py-314_date-51426_env', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
+  UV_PATH: ${{ format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
 jobs:
@@ -48,35 +51,35 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --skip 000108 --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --skip 000108 --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode archive --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --mode archive --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Generate Dandiset totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --mode archive --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --mode archive --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
           entrypoint: 'dandis3logextraction'
 
       - name: Upload summaries
         uses: ./.github/actions/upload-summaries
         with:
-          extraction_cache_path: /mnt/s3-logs/dandi-s3-logs/extraction_cache
-          repository_path: /mnt/s3-logs/dandi-s3-logs/access-summaries
+          extraction_cache_path: ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
+          repository_path: ${{ env.S3_LOG_BASE_PATH }}/access-summaries
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped

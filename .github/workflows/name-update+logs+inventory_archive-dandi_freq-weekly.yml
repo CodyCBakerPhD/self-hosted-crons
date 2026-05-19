@@ -5,8 +5,9 @@ on:
   workflow_dispatch:
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
-  CONDA_ENV_NAME: "s3_logs_cron"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs' }}
+  ENV_PATH: ${{ format('{0}/name-s3logs_py-314_date-51426_env', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
+  UV_PATH: ${{ format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH || '/mnt/s3-logs/dandi-s3-logs') }}
 
 jobs:
 
@@ -31,9 +32,9 @@ jobs:
 
     steps:
       - name: Update log inventory
-        working-directory: /mnt/s3-logs/dandi-s3-logs/inventory
+        working-directory: ${{ env.S3_LOG_BASE_PATH }}/inventory
         run: |
-          source ../conda/bin/activate name-s3+logs+processing_py-3+13_env
+          source ${{ env.ENV_PATH }}/bin/activate
           s5cmd sync --size-only 's3://dandiarchive-inventory/dandiarchive-logs/LogsWeeklyInventory/*' .
 
   NotifyOnFailure:
