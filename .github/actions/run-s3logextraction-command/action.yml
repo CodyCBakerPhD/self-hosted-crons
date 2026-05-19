@@ -9,7 +9,7 @@ description: |
 inputs:
   command:
     description: |
-      `s3logextraction` command to run after activating conda environment.
+      `s3logextraction` command to run after activating the environment.
       Use spaces to separate command groups.
     required: true
   flags:
