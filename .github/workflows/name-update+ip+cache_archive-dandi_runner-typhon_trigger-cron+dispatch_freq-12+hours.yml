@@ -10,8 +10,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
-  CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH }}
+  ENV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/${{ vars.S3LOGS_ENV_NAME }}"
+  UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
+  FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
   IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
   OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
@@ -23,6 +25,11 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v6
+
+      - name: Validate required variables
+        run: |
+          [ -n "${{ vars.DANDI_S3_LOG_BASE_PATH }}" ] || { echo "Repository variable DANDI_S3_LOG_BASE_PATH must be set."; exit 1; }
+          [ -n "${{ vars.S3LOGS_ENV_NAME }}" ] || { echo "Repository variable S3LOGS_ENV_NAME must be set."; exit 1; }
 
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
@@ -44,11 +51,13 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip regions --batch-limit 1
+          flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip coordinates
+          flock_file: ${{ env.FLOCK_FILE }}
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped

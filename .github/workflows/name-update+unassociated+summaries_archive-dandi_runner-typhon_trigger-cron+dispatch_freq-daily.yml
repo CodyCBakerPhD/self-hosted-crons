@@ -10,8 +10,10 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
-  CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH }}
+  ENV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/${{ vars.S3LOGS_ENV_NAME }}"
+  UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
+  FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
 jobs:
@@ -21,6 +23,11 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v6
+
+      - name: Validate required variables
+        run: |
+          [ -n "${{ vars.DANDI_S3_LOG_BASE_PATH }}" ] || { echo "Repository variable DANDI_S3_LOG_BASE_PATH must be set."; exit 1; }
+          [ -n "${{ vars.S3LOGS_ENV_NAME }}" ] || { echo "Repository variable S3LOGS_ENV_NAME must be set."; exit 1; }
 
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
@@ -43,12 +50,14 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip indexes
+          flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Generate unassociated summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --unassociated --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --unassociated --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
   NotifyOnFailure:

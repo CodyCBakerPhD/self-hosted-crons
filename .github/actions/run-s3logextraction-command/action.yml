@@ -1,7 +1,7 @@
 name: Run `s3logextraction` command
 description: |
-  Run the `s3logextraction` command within a specified conda environment.
-  Requires multiple environment variables to be set, including `CONDA_BASE_PATH` and `CONDA_ENV_NAME`.
+  Run the `s3logextraction` command within a specified environment.
+  Requires multiple environment variables to be set, including `ENV_PATH` and `UV_PATH`.
   Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` and other API keys.
   Can override the `entrypoint` to use plugins such as `dandis3logextraction`.
 
@@ -9,7 +9,7 @@ description: |
 inputs:
   command:
     description: |
-      `s3logextraction` command to run after activating conda environment.
+      `s3logextraction` command to run after activating the environment.
       Use spaces to separate command groups.
     required: true
   flags:
@@ -21,17 +21,14 @@ inputs:
     required: false
     default: "s3logextraction"
   flock_file:
-    description: |
-      Path to a file to use for flocking.
-      Defaults to `/mnt/s3-logs/dandi-s3-logs/flocks/s3logextraction.lock`.
-    required: false
-    default: "/mnt/s3-logs/dandi-s3-logs/flocks/s3logextraction.lock"
+    description: Path to a file to use for flocking.
+    required: true
 
 runs:
   using: "composite"
   steps:
     - shell: bash
-      name: Activate conda environment and run command
+      name: Activate environment and run command
       run: |
         source ${{ env.ENV_PATH }}/bin/activate
-        flock -n ${{ inputs.flock_file }} ${{ env.UV_PATH }} run duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}
+        flock -n "${{ inputs.flock_file }}" ${{ env.UV_PATH }} run duct ${{ inputs.entrypoint }} ${{ inputs.command }} ${{ inputs.flags }}

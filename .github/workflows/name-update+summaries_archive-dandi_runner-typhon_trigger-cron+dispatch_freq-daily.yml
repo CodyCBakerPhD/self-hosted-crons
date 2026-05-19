@@ -10,8 +10,15 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH }}
+  CONDA_BASE_PATH: ${{ format('{0}/conda', vars.DANDI_S3_LOG_BASE_PATH) }}
   CONDA_ENV_NAME: "name-s3+logs+processing_py-3+13_env"
+  ENV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/${{ vars.S3LOGS_ENV_NAME }}"
+  UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
+  EXTRACTION_CACHE_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/extraction_cache"
+  EXTRACTION_SUMMARIES_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/extraction_summaries"
+  ACCESS_SUMMARIES_REPOSITORY_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/access-summaries"
+  FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
 
 jobs:
@@ -21,6 +28,11 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v6
+
+      - name: Validate required variables
+        run: |
+          [ -n "${{ vars.DANDI_S3_LOG_BASE_PATH }}" ] || { echo "Repository variable DANDI_S3_LOG_BASE_PATH must be set."; exit 1; }
+          [ -n "${{ vars.S3LOGS_ENV_NAME }}" ] || { echo "Repository variable S3LOGS_ENV_NAME must be set."; exit 1; }
 
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
@@ -43,40 +55,45 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update ip indexes
+          flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Generate Dandiset summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --skip 000108 --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --skip 000108 --directory ${{ env.EXTRACTION_SUMMARIES_PATH }}
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode archive --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --mode archive --directory ${{ env.EXTRACTION_SUMMARIES_PATH }}
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Generate Dandiset totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --directory ${{ env.EXTRACTION_SUMMARIES_PATH }}
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Generate archive totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --mode archive --directory /mnt/s3-logs/dandi-s3-logs/extraction_summaries
+          flags: --mode archive --directory ${{ env.EXTRACTION_SUMMARIES_PATH }}
+          flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
       - name: Upload summaries
         uses: ./.github/actions/upload-summaries
         with:
-          extraction_cache_path: /mnt/s3-logs/dandi-s3-logs/extraction_cache
-          repository_path: /mnt/s3-logs/dandi-s3-logs/access-summaries
+          extraction_cache_path: ${{ env.EXTRACTION_CACHE_PATH }}
+          repository_path: ${{ env.ACCESS_SUMMARIES_REPOSITORY_PATH }}
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped

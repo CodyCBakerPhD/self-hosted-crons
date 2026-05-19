@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
 env:
-  CONDA_BASE_PATH: "/mnt/s3-logs/dandi-s3-logs/conda"
-  CONDA_ENV_NAME: "s3_logs_cron"
+  S3_LOG_BASE_PATH: ${{ vars.DANDI_S3_LOG_BASE_PATH }}
+  ENV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/${{ vars.S3LOGS_ENV_NAME }}"
 
 jobs:
 
@@ -16,6 +16,11 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     steps:
       - uses: actions/checkout@v6
+
+      - name: Validate required variables
+        run: |
+          [ -n "${{ vars.DANDI_S3_LOG_BASE_PATH }}" ] || { echo "Repository variable DANDI_S3_LOG_BASE_PATH must be set."; exit 1; }
+          [ -n "${{ vars.S3LOGS_ENV_NAME }}" ] || { echo "Repository variable S3LOGS_ENV_NAME must be set."; exit 1; }
 
       - name: Cancel if offline
         uses: ./.github/actions/check-runner
@@ -31,10 +36,10 @@ jobs:
 
     steps:
       - name: Update log inventory
-        working-directory: /mnt/s3-logs/dandi-s3-logs/inventory
+        working-directory: ${{ env.S3_LOG_BASE_PATH }}
         run: |
-          source ../conda/bin/activate name-s3+logs+processing_py-3+13_env
-          s5cmd sync --size-only 's3://dandiarchive-inventory/dandiarchive-logs/LogsWeeklyInventory/*' .
+          source ${{ env.ENV_PATH }}/bin/activate
+          s5cmd sync --size-only 's3://dandiarchive-inventory/dandiarchive-logs/LogsWeeklyInventory/*' inventory/
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
