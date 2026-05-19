@@ -15,7 +15,7 @@ env:
   UV_PATH: ${{ format('{0}/uv', vars.DANDI_S3_LOG_BASE_PATH) }}
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  DUCT_OUTPUT_PREFIX: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/extraction_cache/.duct/{datetime}"
+  DUCT_OUTPUT_PREFIX: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/extraction_cache.duct/{datetime}"
 
 jobs:
   CheckTyphon:
