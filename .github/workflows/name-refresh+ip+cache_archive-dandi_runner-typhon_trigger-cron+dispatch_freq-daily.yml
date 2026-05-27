@@ -56,7 +56,7 @@ jobs:
       - name: Update region coordinates
         uses: ./.github/actions/run-s3logextraction-command
         with:
-          command: update ip coordinates --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
+          command: update ip coordinates --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
           flock_file: ${{ env.FLOCK_FILE }}
 
   NotifyOnFailure:
