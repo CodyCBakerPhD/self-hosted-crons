@@ -46,17 +46,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Update IP indexes
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update ip indexes
-          flock_file: ${{ env.FLOCK_FILE }}
-
       - name: Generate unassociated summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --unassociated --directory ${{ env.S3_LOG_BASE_PATH }}/extraction_summaries
+          flags: --unassociated --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
