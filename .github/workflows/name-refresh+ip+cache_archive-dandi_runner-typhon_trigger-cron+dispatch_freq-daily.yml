@@ -1,4 +1,4 @@
-name: Update DANDI IP cache
+name: Refresh DANDI IP cache
 
 on:
   schedule:
@@ -38,9 +38,9 @@ jobs:
           labels: typhon,dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
-  UpdateIPCaches:
+  RefreshIPCaches:
     needs: CheckTyphon
-    name: Update IP caches
+    name: Refresh IP caches
     runs-on: [self-hosted, typhon, dandi]
 
     steps:
