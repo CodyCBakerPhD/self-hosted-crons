@@ -61,7 +61,7 @@ jobs:
 
   NotifyOnFailure:
     if: ${{ always() && failure() }}  # 'always' for if any 'needs' are cancelled/skipped
-    needs: [CheckTyphon, UpdateIPCaches]
+    needs: [CheckTyphon, RefreshIPCaches]
     runs-on: ubuntu-latest
     steps:
       - name: Send email notification on failure
