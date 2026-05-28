@@ -50,7 +50,7 @@ jobs:
       - name: Refresh IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
-          command: s3logextraction update ip refresh --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
+          command: update ip refresh --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
           flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Update region coordinates
