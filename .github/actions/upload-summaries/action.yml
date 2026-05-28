@@ -20,8 +20,6 @@ runs:
       name: Activate conda environment (containing local git config) and run commands
       working-directory: ${{ inputs.extraction_cache_path }}/summaries/
       run: |
-        source ${{ env.CONDA_BASE_PATH }}/bin/activate ${{ env.CONDA_ENV_NAME }}
-
         mkdir ${{ inputs.repository_path }}/content || true
         mkdir ${{ inputs.repository_path }}/content/summaries || true
         find . -type f -name '*.tsv' -exec cp --parents {} ${{ inputs.repository_path }}/content/summaries/  \;
