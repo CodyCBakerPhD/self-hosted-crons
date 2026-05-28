@@ -65,7 +65,6 @@ jobs:
           command: update summaries
           flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive
           flock_file: ${{ env.FLOCK_FILE }}
-          entrypoint: 'dandis3logextraction'
 
       - name: Generate Dandiset totals
         uses: ./.github/actions/run-s3logextraction-command
