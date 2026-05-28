@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode archive --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
+          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
@@ -73,15 +73,13 @@ jobs:
           command: update totals
           flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
-          entrypoint: 'dandis3logextraction'
 
       - name: Generate archive totals
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --mode archive --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
+          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive
           flock_file: ${{ env.FLOCK_FILE }}
-          entrypoint: 'dandis3logextraction'
 
       - name: Upload summaries
         uses: ./.github/actions/upload-summaries
