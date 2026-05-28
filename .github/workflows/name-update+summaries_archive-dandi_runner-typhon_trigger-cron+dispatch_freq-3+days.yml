@@ -55,7 +55,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --skip 000108 --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
+          flags: --skip 000108 --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --mode archive --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
+          flags: --mode archive --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
@@ -71,7 +71,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
+          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
@@ -79,7 +79,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --mode archive --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
+          flags: --mode archive --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
