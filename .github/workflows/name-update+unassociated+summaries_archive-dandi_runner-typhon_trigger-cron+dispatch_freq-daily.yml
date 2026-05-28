@@ -50,7 +50,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --unassociated --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
+          flags: --unassociated --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
