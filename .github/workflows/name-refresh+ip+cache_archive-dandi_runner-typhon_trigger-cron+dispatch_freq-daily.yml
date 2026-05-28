@@ -47,7 +47,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Update IP regions
+      - name: Refresh IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: s3logextraction update ip refresh --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
