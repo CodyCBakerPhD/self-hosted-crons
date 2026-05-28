@@ -2,7 +2,7 @@ name: Refresh DANDI IP cache
 
 on:
   schedule:
-    - cron: "0 1/12 * * *"
+    - cron: "0 4 * * *"
   workflow_dispatch:
 
 concurrency:
