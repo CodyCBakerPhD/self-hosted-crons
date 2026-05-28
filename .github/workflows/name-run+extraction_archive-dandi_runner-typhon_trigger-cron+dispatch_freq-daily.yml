@@ -51,7 +51,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: extract s3://dandiarchive-logs
-          flags: --mode remote --inventory ${{ env.S3_LOG_BASE_PATH }}/inventory --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --limit 1000000 --encryption false
+          flags: --mode remote --inventory ${{ env.S3_LOG_BASE_PATH }}/inventory --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --limit 1000000
           flock_file: ${{ env.FLOCK_FILE }}
           entrypoint: 'dandis3logextraction'
 
