@@ -16,7 +16,6 @@ env:
   ENV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/${{ vars.S3LOGS_ENV_NAME }}"
   UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
   EXTRACTION_CACHE_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/extraction_cache"
-  EXTRACTION_SUMMARIES_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/extraction_summaries"
   ACCESS_SUMMARIES_REPOSITORY_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/access-summaries"
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
