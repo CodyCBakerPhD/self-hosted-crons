@@ -62,7 +62,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update summaries
-          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive
+          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive --asset-types-in-order Neurophysiology,Microscopy,Video,Miscellaneous
           flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Generate Dandiset totals
@@ -76,7 +76,7 @@ jobs:
         uses: ./.github/actions/run-s3logextraction-command
         with:
           command: update totals
-          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive --asset-types-in-order Neurophysiology,Microscopy,Video,Miscellaneous
+          flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive
           flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Upload summaries
