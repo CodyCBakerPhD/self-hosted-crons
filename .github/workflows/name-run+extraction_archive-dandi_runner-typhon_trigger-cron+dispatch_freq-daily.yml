@@ -73,7 +73,7 @@ jobs:
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "DANDI log extraction failed (Typhon CRON)"
           to: cody.c.baker.phd@gmail.com  # Add more with comma separation (no spaces)
-          from: Typhon CRON
+          from: Typhon CRON <${{ secrets.MAIL_USERNAME }}>
           body: |
             The scheduled run of S3 log extraction updates encountered an issue, please check status at
             https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-run+extraction_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-daily.yml
