@@ -56,6 +56,7 @@ jobs:
           command: update summaries
           flags: --skip 000108 --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache
           flock_file: ${{ env.FLOCK_FILE }}
+          entrypoint: 'dandis3logextraction'
 
       - name: Generate archive summaries
         uses: ./.github/actions/run-s3logextraction-command
@@ -63,7 +64,6 @@ jobs:
           command: update summaries
           flags: --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --mode archive --asset-types-in-order Neurophysiology,Microscopy,Video,Miscellaneous
           flock_file: ${{ env.FLOCK_FILE }}
-          entrypoint: 'dandis3logextraction'
 
       - name: Generate Dandiset totals
         uses: ./.github/actions/run-s3logextraction-command
