@@ -13,8 +13,9 @@ env:
   CONDA_BASE_PATH: "/data/ember/s3-logs/conda"
   CONDA_ENV_NAME: "s3_logs_cron"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-  OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+  # Requesters are geolocated while the summaries are generated, against the GeoLite2 database
+  MAXMIND_ACCOUNT_ID: ${{ secrets.MAXMIND_ACCOUNT_ID }}
+  MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
 
 jobs:
   CheckTyphon:
@@ -47,24 +48,6 @@ jobs:
           flags: --mode dandi-remote --manifest /data/ember/s3-logs/extraction_cache/manifest_parsed.json
           flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
-      - name: Update IP indexes
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update ip indexes
-          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
-
-      - name: Update IP regions
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update ip regions
-          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
-
-      - name: Update region coordinates
-        uses: ./.github/actions/run-s3logextraction-command
-        with:
-          command: update ip coordinates
-          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
-
       - name: Generate Dandiset summaries
         uses: ./.github/actions/run-s3logextraction-command
         with:
@@ -77,6 +60,13 @@ jobs:
         with:
           command: update summaries
           flags: --mode archive
+          flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
+
+      # Reads the region labels out of the published `by_region.tsv` files, so it has to follow the summaries
+      - name: Update region coordinates
+        uses: ./.github/actions/run-s3logextraction-command
+        with:
+          command: update ip coordinates
           flock_file: /data/ember/s3-logs/flocks/s3logextraction.lock
 
       - name: Generate Dandiset totals

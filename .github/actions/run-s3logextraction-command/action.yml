@@ -2,8 +2,12 @@ name: Run `s3logextraction` command
 description: |
   Run the `s3logextraction` command within a specified environment.
   Requires multiple environment variables to be set, including `ENV_PATH` and `UV_PATH`.
-  Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` and other API keys.
+  Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` for cache encryption, and the
+  `MAXMIND_ACCOUNT_ID`/`MAXMIND_LICENSE_KEY` of a free MaxMind account for the GeoLite2 database
+  used to geolocate requesters during `update summaries` and by `update ip database`.
   Can override the `entrypoint` to use plugins such as `dandis3logextraction`.
+  Note that the `dandis3logextraction` entrypoint does not define the `update ip` group, so those
+  commands must always run through the default `s3logextraction` entrypoint.
 
 
 inputs:

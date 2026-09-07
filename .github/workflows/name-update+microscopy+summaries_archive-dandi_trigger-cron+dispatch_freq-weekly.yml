@@ -11,6 +11,9 @@ env:
   UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
+  # Requesters are geolocated while the summaries are generated, against the GeoLite2 database
+  MAXMIND_ACCOUNT_ID: ${{ secrets.MAXMIND_ACCOUNT_ID }}
+  MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
 
 jobs:
 
