@@ -1,0 +1,49 @@
+name: Install `s3logextraction` packages
+description: |
+  Install (or upgrade) `s3_log_extraction` and `dandi_s3_log_extraction` into the runner environment.
+  Requires the `ENV_PATH` and `UV_PATH` environment variables to be set.
+
+  Upstream is installed first so that the downstream pin on it is already satisfied by the time
+  `dandi_s3_log_extraction` is resolved; installing downstream first makes pip fall through to PyPI,
+  which only carries the older upstream releases.
+
+inputs:
+  flock_file:
+    description: Path to a file to use for flocking, so that installs do not race a running pipeline.
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      name: Check the environment interpreter
+      # `s3_log_extraction` 1.11.1 declares `requires-python = ">=3.14"`; a 3.13 environment must be rebuilt first
+      run: |
+        set -euo pipefail
+        source ${{ env.ENV_PATH }}/bin/activate
+        python -c 'import sys; sys.exit(0 if sys.version_info >= (3, 14) else 1)' || {
+          echo "The environment at ${{ env.ENV_PATH }} runs $(python -V), but s3_log_extraction requires Python 3.14 or newer."
+          echo "Recreate the environment on 3.14 before installing."
+          exit 1
+        }
+
+    - shell: bash
+      name: Install packages into the environment
+      # TODO: switch both installs to `@main` once dandi/s3-log-extraction#296, dandi/s3-log-extraction#297,
+      #       and dandi/dandi-s3-log-extraction#96 are merged, then to plain PyPI version pins
+      #       (`s3_log_extraction[geolocation]>=1.11.1` and `dandi_s3_log_extraction[geolocation]>=1.4.2`)
+      #       once those releases are published.
+      run: |
+        set -euo pipefail
+        source ${{ env.ENV_PATH }}/bin/activate
+        flock -n "${{ inputs.flock_file }}" ${{ env.UV_PATH }} pip install --upgrade \
+          "s3_log_extraction[geolocation] @ git+https://github.com/dandi/s3-log-extraction.git@claude/ip-geolocation-services-3881nm-coordinates"
+        flock -n "${{ inputs.flock_file }}" ${{ env.UV_PATH }} pip install --upgrade \
+          "dandi_s3_log_extraction[geolocation] @ git+https://github.com/dandi/dandi-s3-log-extraction.git@claude/geolite2-upstream-follow-up"
+
+    - shell: bash
+      name: Report installed versions
+      run: |
+        set -euo pipefail
+        source ${{ env.ENV_PATH }}/bin/activate
+        ${{ env.UV_PATH }} pip show s3_log_extraction dandi_s3_log_extraction | grep -E '^(Name|Version):'

@@ -2,7 +2,7 @@ name: Update DANDI IP cache
 
 on:
   schedule:
-    - cron: "0 1/8 * * *"
+    - cron: "0 4 * * *"  # Geolocation is a local GeoLite2 lookup with no quota, so one daily pass resolves every new IP
   workflow_dispatch:
 
 concurrency:
@@ -15,8 +15,8 @@ env:
   UV_PATH: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/uv"
   FLOCK_FILE: "${{ vars.DANDI_S3_LOG_BASE_PATH }}/flocks/s3logextraction.lock"
   S3_LOG_EXTRACTION_PASSWORD: ${{ secrets.S3_LOG_EXTRACTION_PASSWORD }}
-  IPINFO_API_KEY: ${{ secrets.IPINFO_API_KEY }}
-  OPENCAGE_API_KEY: ${{ secrets.OPENCAGE_API_KEY }}
+  MAXMIND_ACCOUNT_ID: ${{ secrets.MAXMIND_ACCOUNT_ID }}
+  MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
 
 jobs:
   CheckTyphon:
@@ -50,7 +50,7 @@ jobs:
       - name: Update IP regions
         uses: ./.github/actions/run-s3logextraction-command
         with:
-          command: update ip regions --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --batch-limit 1 --encryption false
+          command: update ip regions --cache ${{ env.S3_LOG_BASE_PATH }}/extraction_cache --encryption false
           flock_file: ${{ env.FLOCK_FILE }}
 
       - name: Update region coordinates
@@ -76,4 +76,4 @@ jobs:
           from: Typhon CRON <${{ secrets.MAIL_USERNAME }}>
           body: |
             A scheduled run of S3 log extraction updates encountered an issue, please check status at
-            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-update+ip+cache_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-12+hours.yml
+            https://github.com/CodyCBakerPhD/self-hosted-crons/actions/workflows/name-update+ip+cache_archive-dandi_runner-typhon_trigger-cron+dispatch_freq-daily.yml
