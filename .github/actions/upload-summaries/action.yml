@@ -2,7 +2,7 @@ name: Upload summaries
 description: |
   Upload the final access log summaries to an already-cloned GitHub repo.
   Requires multiple environment variables to be set, including `CONDA_BASE_PATH` and `CONDA_ENV_NAME`.
-  Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` and other API keys.
+  Some commands may also require `S3_LOG_EXTRACTION_PASSWORD` for cache encryption.
 
 
 inputs:
