@@ -3,9 +3,9 @@ description: |
   Install (or upgrade) `s3_log_extraction` and `dandi_s3_log_extraction` into the runner environment.
   Requires the `ENV_PATH` and `UV_PATH` environment variables to be set.
 
-  Upstream is installed first so that the downstream pin on it is already satisfied by the time
-  `dandi_s3_log_extraction` is resolved; installing downstream first makes pip fall through to PyPI,
-  which only carries the older upstream releases.
+  Upstream is installed explicitly, rather than left to the downstream dependency, so that its own
+  `geolocation` extra is applied: the downstream extra of the same name only pulls the geolocation
+  dependencies into `dandi_s3_log_extraction` itself.
 
 inputs:
   flock_file:
@@ -29,17 +29,16 @@ runs:
 
     - shell: bash
       name: Install packages into the environment
-      # TODO: switch both installs to `@main` once dandi/s3-log-extraction#298 and
-      #       dandi/dandi-s3-log-extraction#97 are merged, then to plain PyPI version pins
-      #       (`s3_log_extraction[geolocation]>=1.11.2` and `dandi_s3_log_extraction[geolocation]>=1.4.3`)
-      #       once those releases are published.
+      # `dandi_s3_log_extraction` has no PyPI release yet — it publishes on GitHub release and has no tags —
+      # so it is installed from `@main`, which carries dandi/dandi-s3-log-extraction#97.
+      # TODO: switch it to a plain PyPI pin (`dandi_s3_log_extraction[geolocation]>=1.4.2`) once released.
       run: |
         set -euo pipefail
         source ${{ env.ENV_PATH }}/bin/activate
         flock -n "${{ inputs.flock_file }}" ${{ env.UV_PATH }} pip install --upgrade \
-          "s3_log_extraction[geolocation] @ git+https://github.com/dandi/s3-log-extraction.git@claude/ip-geolocation-services-3881nm-summary-resolution"
+          "s3_log_extraction[geolocation]>=1.11.2"
         flock -n "${{ inputs.flock_file }}" ${{ env.UV_PATH }} pip install --upgrade \
-          "dandi_s3_log_extraction[geolocation] @ git+https://github.com/dandi/dandi-s3-log-extraction.git@claude/geolite2-summary-resolution"
+          "dandi_s3_log_extraction[geolocation] @ git+https://github.com/dandi/dandi-s3-log-extraction.git@main"
 
     - shell: bash
       name: Report installed versions
