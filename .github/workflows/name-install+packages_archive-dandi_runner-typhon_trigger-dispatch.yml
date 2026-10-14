@@ -22,17 +22,14 @@ jobs:
     name: Pre-run Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-
       - name: Validate required variables
         run: |
           [ -n "${{ vars.DANDI_S3_LOG_BASE_PATH }}" ] || { echo "Repository variable DANDI_S3_LOG_BASE_PATH must be set."; exit 1; }
           [ -n "${{ vars.S3LOGS_ENV_NAME }}" ] || { echo "Repository variable S3LOGS_ENV_NAME must be set."; exit 1; }
 
       - name: Cancel if offline
-        uses: ./.github/actions/check-runner
+        uses: CodyCBakerPhD/check-runner-action@v1
         with:
-          org: CodyCBakerPhD/self-hosted-crons
           labels: typhon,dandi
           token: ${{ secrets._GITHUB_API_KEY }}
 
